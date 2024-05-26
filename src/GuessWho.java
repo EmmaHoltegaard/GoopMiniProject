@@ -2,19 +2,16 @@ package src;
 
 
 import javafx.application.Application;
-import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /* This class will be the main class. It will be responsible for connecting UI to Game functionality
 + creating all constant elements in GUI (everything except characters)
@@ -67,7 +64,7 @@ public class GuessWho extends Application {
         }
 
         // Set the scene and show the stage
-        Scene scene = new Scene(root, 900, 600);
+        Scene scene = new Scene(root, 950, 520);
         scene.getStylesheets().add("style.css"); // Applies CSS file
         primaryStage.setScene(scene);
         primaryStage.setTitle("Guess Who");
@@ -81,9 +78,13 @@ public class GuessWho extends Application {
         VBox menuContainer = new VBox(10);
 
         // Create UI elements:
-        Button askQuestionButton = new Button("Ask Question");
+        Button askQuestionButton = new Button("Ask");
 
         Button restartButton = new Button("Restart");
+
+        Label questionCount = new Label("Questions asked: " + currentGame.getQuestionCount());
+
+        Label prompt = new Label("Does the secret person have...");
 
         ComboBox<String> questionComboBox = new ComboBox<>();
         // Add the "Choose one..." item
@@ -108,10 +109,11 @@ public class GuessWho extends Application {
         askQuestionButton.getStyleClass().add("ask-button");
 
         // Event handlers:
-        restartButton.setOnAction(event -> {
+        restartButton.setOnAction( event -> {
             currentGame = new Game();
             System.out.println("Secret person is:" + currentGame.getSecretPerson());
             generateBoard();
+            questionCount.setText("Questions asked: " + currentGame.getQuestionCount()); // update question count in UI
         });
 
         // Set up action for when an option is selected
@@ -120,18 +122,20 @@ public class GuessWho extends Application {
             System.out.println("Selected question is " + selectedOption);
             if (!selectedOption.equals("Choose one...")) {
                 currentGame.checkQuestion(selectedOption);
+                questionCount.setText("Questions asked: " + currentGame.getQuestionCount()); // update questionCount
+                generateBoard();
             } else {
                 System.out.println("Please select a question from the drop-down");
             }
         });
 
         // Add UI elements to container:
-        menuContainer.getChildren().addAll(restartButton, questionComboBox, askQuestionButton);
+        menuContainer.getChildren().addAll(restartButton, prompt, questionComboBox, askQuestionButton, questionCount);
 
         return menuContainer;
     }
 
-    // boardConstainer
+    // boardContainer
     private GridPane createBoardContainer() {
         GridPane boardContainer = new GridPane(); // flexible layout
 
@@ -143,7 +147,7 @@ public class GuessWho extends Application {
 
     // contents of board:
     private void generateBoard() {
-        // Clear & reset board of children elements:
+        // Clear & reset board of child elements:
         boardContainer.getChildren().clear();
 
         // create UI element for each character + add to boardContainer

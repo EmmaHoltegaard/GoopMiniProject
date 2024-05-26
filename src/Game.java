@@ -8,7 +8,6 @@ package src;
 // - setting the secret person
 // - Logic for checking if a guess is correct
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -52,7 +51,6 @@ public class Game {
         if (parts.length == 2) {
             category = parts[0].toLowerCase();
             value = parts[1].toLowerCase();
-            System.out.println("checkQuestion will filter based on " + category + " and " + value);
 
             // Check for match between selected question & secretPerson's attributed - and invoke filterCharacters()
             // filterCharacters(true) = keep characters with selected attribute
@@ -60,24 +58,24 @@ public class Game {
             if (category.equals("hair") || category.equals("eyes")) {
                 String secretAttribute = secretPerson.getAttribute(category, String.class);
                 if (secretAttribute.equals(value)) {
-                    //filterCharacters(true);
-                    updateQuestionCount();
-                    System.out.println(questionCount);
+                    filterCharacters(true, category, value);
+                    //updateQuestionCount();
+                    //System.out.println(questionCount);
                 } else {
-                    //filterCharacters(false);
-                    updateQuestionCount();
-                    System.out.println(questionCount);
+                    filterCharacters(false, category, value);
+                    //updateQuestionCount();
+                    //System.out.println(questionCount);
                 }
             } else if (category.equals("accessories") || category.equals("other") || category.equals("pets")) {
                 String[] secretAttribute = secretPerson.getAttribute(category, String[].class);
                 if (Arrays.asList(secretAttribute).contains(value)) {
-                    //filterCharacters(true);
-                    updateQuestionCount();
-                    System.out.println(questionCount);
+                    filterCharacters(true, category, value);
+                    //updateQuestionCount();
+                    //System.out.println(questionCount);
                 } else {
-                    //filterCharacters(false);
-                    updateQuestionCount();
-                    System.out.println(questionCount);
+                    filterCharacters(false, category, value);
+                    //updateQuestionCount();
+                    //System.out.println(questionCount);
                 }
             }
         } else {
@@ -104,9 +102,23 @@ public class Game {
         questionCount++;
     }
 
-    private void filterCharacters(boolean keep) {
-        // NOT DONE
-        // filters charactersInPlay, based on true/false input.
+    private void filterCharacters(boolean keep, String category, String value) {
+        // NOT DONE - TRY FOR SIMPLER ALTERNATIVES OR JUST WRITE OUT COMMENTS
+        System.out.println("checkQuestion will filter based on " + category + " and " + value);
+        updateQuestionCount();
+        System.out.println(getQuestionCount());
+
+        charactersInPlay.removeIf(person -> {
+            Object attribute = person.getAttribute(category, Object.class);
+
+            if (attribute instanceof String) {
+                return attribute.equals(value) != keep;
+            } else if (attribute instanceof String[]) {
+                return Arrays.asList((String[]) attribute).contains(value) != keep;
+            }
+            return false;
+        });
+
     }
 
     private ArrayList<Character> initializeCharacterList() {
