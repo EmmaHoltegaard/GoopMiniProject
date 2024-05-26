@@ -20,14 +20,25 @@ public class Game {
     // public String[] allQuestions;  - list of all possible questions?
 
     // CONSTRUCTOR:
+    // Having a game initialised in the constructor created problems in Main, specifically for the restartGame button.
+    // Having the newGame() method instead is easier for that specific reason.
+    /*
     public Game() {
         charactersInPlay = initializeCharacterList(); // Assign new (full) list to charactersInPlay
         setSecretPerson(charactersInPlay); // Choose secretPerson from the initial full list of characters
         guessCount = 0; // reset guessCount
         questionLimit = 3; // decide question limit
-    }
+    }*/
 
     // METHODS:
+    public void newGame() {
+        charactersInPlay = initializeCharacterList(); // Assign new (full) list to charactersInPlay
+        setSecretPerson(charactersInPlay); // Choose secretPerson from the initial full list of characters
+        guessCount = 0;  // reset guessCount
+        questionLimit = 3;  // decide question limit
+    }
+
+
     public void updateGuessCount() {
         guessCount++;
     }
@@ -104,14 +115,6 @@ public class Game {
         return allCharacters;
     }
 
-    /*
-    public void newGame() {
-        charactersInPlay = initializeCharacterList(); // Assign new (full) list to charactersInPlay
-        // setSecretPerson(charactersInPlay); // choose secretPerson from the initial full list of characters
-        guessCount = 0;
-        guessLimit = 3;
-    } MOVED THIS TO THE CONSTRUCTOR. INITIALISE NEW GAME OBJECT TO START A NEW GAME.
-    */
 
     // Maybe I'll need a helper method for selecting and a character in GUI and making sure it's the guess the player wants to make...
 

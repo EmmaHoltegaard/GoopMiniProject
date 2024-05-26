@@ -2,6 +2,7 @@ package src;
 
 
 import javafx.application.Application;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 /* This class will be the main class. It will be responsible for the flow of the game
@@ -19,25 +20,36 @@ public class GuessWho extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Game currentGame;
+        Game game = new Game();
 
-        // Build constant UI elements:
+        // Build all constant UI elements:
+            // Menu of questions
+            // Ask-button
+            // Container for the board
+
+            // restart button:
+        Button restartGame = new Button("Restart");
+        restartGame.setOnAction(event -> {
+            game.newGame();
+            generateBoard();
+        });
+
 
         // New game on start():
-        currentGame = new Game();
-        // + generateBoard()
+        game.newGame();
+        generateBoard();
 
-        // Restart button (should assign new Game to currentGame + generateBoard())
 
         // Testing:
-        System.out.println("Secret person is:" + currentGame.getSecretPerson());
-        for (Character character : currentGame.charactersInPlay) {
+        System.out.println("Secret person is:" + game.getSecretPerson());
+        for (Character character : game.charactersInPlay) {
             System.out.println(character.name);
         }
     }
 
     public void generateBoard() {
-        // create UI for board
+        // create UI for board specifically
+        // Image + button for each.
     }
 
 
