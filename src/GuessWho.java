@@ -11,7 +11,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.util.HashMap;
@@ -31,7 +30,7 @@ import java.util.Map;
 // Build all constant UI elements:
 // Menu of questions
 // Ask-button
-// Container for the board
+// restart button (styling)
 
 public class GuessWho extends Application {
 
@@ -76,16 +75,32 @@ public class GuessWho extends Application {
         System.out.println("Scene set");
     }
 
+    // Menu Container:
     private VBox createMenuContainer() {
         // Create the menu container
         VBox menuContainer = new VBox(10);
 
         // Create UI elements:
         Button askQuestionButton = new Button("Ask Question");
+
         Button restartButton = new Button("Restart");
+
         ComboBox<String> questionComboBox = new ComboBox<>();
-        questionComboBox.setItems(FXCollections.observableArrayList(
-                "Hair Color", "Eye Color", "Accessories")); // question's categories
+        // Add the "Choose one..." item
+        questionComboBox.getItems().add("Choose one...");
+        questionComboBox.setValue("Choose one...");
+        // Add different options to comboBox:
+        questionComboBox.getItems().addAll(
+                "Hair: brown", "Hair: yellow", "Hair: hidden", "Hair: black", "Hair: grey",
+                "Hair: orange", "Hair: purple", "Hair: white");
+        questionComboBox.getItems().addAll(
+                "Eyes: hidden", "Eyes: brown", "Eyes: blue", "Eyes: green");
+        questionComboBox.getItems().addAll(
+                "Accessories: glasses", "Accessories: hats", "Accessories: facial hair");
+        questionComboBox.getItems().addAll("Other: smoker");
+        questionComboBox.getItems().addAll("Pets: parrot");
+
+
 
         // Set CSS style class
         menuContainer.getStyleClass().add("menu-container");
@@ -99,12 +114,24 @@ public class GuessWho extends Application {
             generateBoard();
         });
 
+        // Set up action for when an option is selected
+        askQuestionButton.setOnAction(event -> {
+            String selectedOption = questionComboBox.getValue();
+            System.out.println("Selected question is " + selectedOption);
+            if (!selectedOption.equals("Choose one...")) {
+                currentGame.checkQuestion(selectedOption);
+            } else {
+                System.out.println("Please select a question from the drop-down");
+            }
+        });
+
         // Add UI elements to container:
         menuContainer.getChildren().addAll(restartButton, questionComboBox, askQuestionButton);
 
         return menuContainer;
     }
 
+    // boardConstainer
     private GridPane createBoardContainer() {
         GridPane boardContainer = new GridPane(); // flexible layout
 
@@ -114,6 +141,7 @@ public class GuessWho extends Application {
         return boardContainer;
     }
 
+    // contents of board:
     private void generateBoard() {
         // Clear & reset board of children elements:
         boardContainer.getChildren().clear();
@@ -145,7 +173,7 @@ public class GuessWho extends Application {
                 // Handle button click
                 System.out.println("Clicked character: " + character.name);
 
-                boolean isGuessCorrect = currentGame.checkGuess(character.name);
+                boolean isGuessCorrect = currentGame.checkGuess(character);
 
                 if (isGuessCorrect) {
                     System.out.println("Correct!"); // change to an allert? Followed by restart?
@@ -154,13 +182,15 @@ public class GuessWho extends Application {
                 }
             });
 
+            // Margin around characterPanes
+            GridPane.setMargin(characterPane, new Insets(5, 5, 5, 5));
+
             // Add the UI elements to the characterPane
             characterPane.getChildren().addAll(characterImage, characterButton);
 
             // Add the characterPaneContainer to the board container at the specified position
             boardContainer.add(characterPane, columnIndex, rowIndex);
 
-            GridPane.setMargin(characterPane, new Insets(5, 5, 5, 5));
 
             // Update column and row indices - moves to the next row, once a row is full.
             // This is done every iteration to figure out placement of each individual characterPane

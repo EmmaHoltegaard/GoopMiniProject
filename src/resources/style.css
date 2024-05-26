@@ -1,6 +1,7 @@
 
 .menu-container {
     -fx-background-color: pink;
+    -fx-padding: 20px;
 }
 
 .restart-button {}

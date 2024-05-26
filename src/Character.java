@@ -23,5 +23,20 @@ public class Character {
         this.pets = pets;
     }
 
-    // Consider: Make other constructors, where less info is necessary?
+    // A method that returns value(s) of a specific attribute, with type safety (using generics)
+    public <T> T getAttribute(String category, Class<T> type) {
+        switch (category) {
+            case "hair":
+                return type.cast(hair);
+            case "eyes":
+                return type.cast(eyes);
+            case "accessories":
+                return type.cast(accessories);
+            case "other":
+                return type.cast(other);
+            case "pets":
+                return type.cast(pets);
+        }
+        return null;
+    }
 }

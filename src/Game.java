@@ -8,22 +8,23 @@ package src;
 // - setting the secret person
 // - Logic for checking if a guess is correct
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 public class Game {
     // INSTANCE VARIABLES:
     public ArrayList<Character> charactersInPlay;
-    private String secretPerson;
+    private Character secretPerson;
     private int questionCount;
     private int questionLimit;
     // public String[] allQuestions;  - list of all possible questions?
 
     // CONSTRUCTOR:
-
     public Game() {
         charactersInPlay = initializeCharacterList(); // Assign new (full) list to charactersInPlay
-        setSecretPerson(charactersInPlay); // Choose secretPerson from the initial full list of characters
+        secretPerson = setSecretPerson(charactersInPlay); // Choose secretPerson from the initial full list of characters
         questionCount = 0; // reset guessCount
         questionLimit = 3; // decide question limit
     }
@@ -37,37 +38,70 @@ public class Game {
         return questionLimit;
     }
 
+    // returns name of secret person
     public String getSecretPerson() {
-        return secretPerson;
+        return secretPerson.name;
     }
 
-    public void checkQuestion(String category, String value) {
-        // NOT DONE
-        System.out.println("checkQuestion will filter based on " + category + ": " + value);
-        updateQuestionCount();
+    public void checkQuestion(String question) {
+        String category;
+        String value;
 
-        // Checks for match between chosen question + secretPerson and invokes filterCharacters()
-        // filterCharacters(true) = keep characters with selected attribute
-        // filterCharacters(false) = remove characters with selected attribute
+        // Split question into category and value
+        String[] parts = question.split(": "); // array of parts
+        if (parts.length == 2) {
+            category = parts[0].toLowerCase();
+            value = parts[1].toLowerCase();
+            System.out.println("checkQuestion will filter based on " + category + " and " + value);
+
+            // Check for match between selected question & secretPerson's attributed - and invoke filterCharacters()
+            // filterCharacters(true) = keep characters with selected attribute
+            // filterCharacters(false) = remove characters with selected attribute
+            if (category.equals("hair") || category.equals("eyes")) {
+                String secretAttribute = secretPerson.getAttribute(category, String.class);
+                if (secretAttribute.equals(value)) {
+                    //filterCharacters(true);
+                    updateQuestionCount();
+                    System.out.println(questionCount);
+                } else {
+                    //filterCharacters(false);
+                    updateQuestionCount();
+                    System.out.println(questionCount);
+                }
+            } else if (category.equals("accessories") || category.equals("other") || category.equals("pets")) {
+                String[] secretAttribute = secretPerson.getAttribute(category, String[].class);
+                if (Arrays.asList(secretAttribute).contains(value)) {
+                    //filterCharacters(true);
+                    updateQuestionCount();
+                    System.out.println(questionCount);
+                } else {
+                    //filterCharacters(false);
+                    updateQuestionCount();
+                    System.out.println(questionCount);
+                }
+            }
+        } else {
+            System.out.println("Question check failed");
+        }
     }
 
-    public boolean checkGuess(String guess) {
-        // NOT DONE
-        if (guess.equals(secretPerson)) {
+    public boolean checkGuess(Character guess) {
+        if (guess.name.equals(secretPerson.name)) {
             return true;
         } else {
             return false;
         }
     }
 
-    private void updateQuestionCount() {
-        questionCount++;
-    }
-
-    private void setSecretPerson(ArrayList<Character> allCharacters) {
+    private Character setSecretPerson(ArrayList<Character> allCharacters) {
         Random random = new Random();
         int randomIndex = random.nextInt(allCharacters.size()); // .nextInt() to generate random int within 0-23 (24 characters)
-        secretPerson = allCharacters.get(randomIndex).name; // Use random int to select from index in charactersInPlay
+        secretPerson = allCharacters.get(randomIndex); // Use random int to select from index in charactersInPlay
+        return secretPerson;
+    }
+
+    private void updateQuestionCount() {
+        questionCount++;
     }
 
     private void filterCharacters(boolean keep) {
