@@ -2,10 +2,13 @@ package src;
 
 
 import javafx.application.Application;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-/* This class will be the main class. It will be responsible for the flow of the game
+/* This class will be the main class. It will be responsible for connecting UI to Game functionality
 + creating all constant elements in GUI (everything except characters)
 + initialise/call things from other classes.
 + generateBoard()
@@ -16,40 +19,95 @@ import javafx.stage.Stage;
     - Buttons (restart, guess, select question...)
  */
 
+// Build all constant UI elements:
+// Menu of questions
+// Ask-button
+// Container for the board
+
 public class GuessWho extends Application {
+
+    //Instance variables:
+    Game currentGame;
+
+    // start()
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Game game = new Game();
 
-        // Build all constant UI elements:
-            // Menu of questions
-            // Ask-button
-            // Container for the board
+        // Create root layout:
+        BorderPane root = new BorderPane();
 
-            // restart button:
-        Button restartGame = new Button("Restart");
-        restartGame.setOnAction(event -> {
-            game.newGame();
-            generateBoard();
-        });
+        // Create Menu container (left) + add to root
+        VBox menuContainer = createMenuContainer(); // Vertical box
+        root.setLeft(menuContainer);
 
+        // Create Board container (right) + add to root
+        GridPane boardContainer = createBoardContainer();
+        root.setCenter(boardContainer);
 
         // New game on start():
-        game.newGame();
+        currentGame = new Game();
         generateBoard();
 
-
         // Testing:
-        System.out.println("Secret person is:" + game.getSecretPerson());
-        for (Character character : game.charactersInPlay) {
+        System.out.println("Secret person is:" + currentGame.getSecretPerson());
+        for (Character character : currentGame.charactersInPlay) {
             System.out.println(character.name);
         }
+
+        // Set the scene and show the stage
+        Scene scene = new Scene(root, 900, 600);
+        scene.getStylesheets().add("style.css"); // Applies CSS file
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Guess Who");
+        primaryStage.show();
+        System.out.println("Scene set");
     }
 
-    public void generateBoard() {
-        // create UI for board specifically
-        // Image + button for each.
+    private VBox createMenuContainer() {
+        // Create the menu container
+        VBox menuContainer = new VBox(10);
+
+        // Buttons etc.
+        Button askQuestionButton = new Button("Ask Question");
+        Button restartButton = new Button("Restart");
+
+        // Add CSS style class
+        menuContainer.getStyleClass().add("menu-container");
+        restartButton.getStyleClass().add("restart-button");
+        askQuestionButton.getStyleClass().add("ask-button");
+
+        // Event handlers:
+        restartButton.setOnAction(event -> {
+            currentGame = new Game();
+            System.out.println("Secret person is:" + currentGame.getSecretPerson());
+            generateBoard(); // needs to be defined
+        });
+
+        // Styling:
+        // menuContainer.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, null)));
+
+        // Add UI elements to container:
+        menuContainer.getChildren().addAll(askQuestionButton, restartButton);
+
+        return menuContainer;
+    }
+
+    private GridPane createBoardContainer() {
+        GridPane boardContainer = new GridPane(); // flexible layout
+
+        // Set CSS style class
+        boardContainer.getStyleClass().add("board-container");
+
+        return boardContainer;
+    }
+
+    private void generateBoard() {
+        // Reset // clear
+        // create UI elements + add to boardContainer
+            // Image + button for each character, arranged in columns/rows
+
+        // Event handlers:
     }
 
 

@@ -15,46 +15,36 @@ public class Game {
     // INSTANCE VARIABLES:
     public ArrayList<Character> charactersInPlay;
     private String secretPerson;
-    private int guessCount;
+    private int questionCount;
     private int questionLimit;
     // public String[] allQuestions;  - list of all possible questions?
 
     // CONSTRUCTOR:
-    // Having a game initialised in the constructor created problems in Main, specifically for the restartGame button.
-    // Having the newGame() method instead is easier for that specific reason.
-    /*
+
     public Game() {
         charactersInPlay = initializeCharacterList(); // Assign new (full) list to charactersInPlay
         setSecretPerson(charactersInPlay); // Choose secretPerson from the initial full list of characters
-        guessCount = 0; // reset guessCount
+        questionCount = 0; // reset guessCount
         questionLimit = 3; // decide question limit
-    }*/
+    }
 
     // METHODS:
-    public void newGame() {
-        charactersInPlay = initializeCharacterList(); // Assign new (full) list to charactersInPlay
-        setSecretPerson(charactersInPlay); // Choose secretPerson from the initial full list of characters
-        guessCount = 0;  // reset guessCount
-        questionLimit = 3;  // decide question limit
-    }
-
-
-    public void updateGuessCount() {
-        guessCount++;
-    }
-
-    public int getGuessCount() {
-        return guessCount;
+    public int getQuestionCount() {
+        return questionCount;
     }
 
     public int getQuestionLimit() {
         return questionLimit;
     }
 
+    public String getSecretPerson() {
+        return secretPerson;
+    }
+
     public void checkQuestion(/* selected question / category + value?*/) {
         // NOT DONE
         // Checks for match between chosen question + secretPerson
-        // filterCharacters()
+        // Invokes filterCharacters() w. either true or false
     }
 
     public boolean isGuessCorrect(String guess) {
@@ -66,14 +56,14 @@ public class Game {
         }
     }
 
-    public String getSecretPerson() {
-        return secretPerson;
+    private void updateQuestionCount() {
+        questionCount++;
     }
 
     private void setSecretPerson(ArrayList<Character> allCharacters) {
         Random random = new Random();
-        int randomIndex = random.nextInt(charactersInPlay.size());
-        secretPerson = charactersInPlay.get(randomIndex).name;
+        int randomIndex = random.nextInt(allCharacters.size()); // .nextInt() to generate random int within 0-23 (24 characters)
+        secretPerson = allCharacters.get(randomIndex).name; // Use random int to select from index in charactersInPlay
     }
 
     private void filterCharacters(boolean keep) {
@@ -131,4 +121,20 @@ public class Game {
     // checkQuestion() - checks for a match between attribute and secretCharacter. Then call filterCharacters()
     // filterCharacters() - again
     // isGuessCorrect() - Checks if guess is correct
+
 }
+
+/* Notes on constructor vs. newGame():
+    // Having a game initialised through the constructor created problems in Main, specifically for the restartGame button.
+    // The restart button wouldn't allow a new Game object to be assigned to the existing currentGame variable declared outside the event handler/lambda, requiring verbose workarounds involving an array of games.
+    // Starting a new game with the newGame() method (instead of by instantiating with a new Game object) is easier for this specific reason.
+    // UPDATE: NOPE. I had just declared currentGame as a local variable in start(), not as an instance variable. Now it works.
+
+        /*public void newGame() {
+        charactersInPlay = initializeCharacterList(); // Assign new (full) list to charactersInPlay
+        setSecretPerson(charactersInPlay); // Choose secretPerson from the initial full list of characters
+        questionCount = 0;  // reset guessCount
+        questionLimit = 3;  // decide question limit
+    }
+*/
+ */
