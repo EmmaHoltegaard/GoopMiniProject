@@ -2,11 +2,20 @@ package src;
 
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /* This class will be the main class. It will be responsible for connecting UI to Game functionality
 + creating all constant elements in GUI (everything except characters)
@@ -28,11 +37,14 @@ public class GuessWho extends Application {
 
     //Instance variables:
     Game currentGame;
+    GridPane boardContainer; // must be inst. var. to be accessible in generateBoard as well as start()
 
     // start()
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+        currentGame = new Game();
 
         // Create root layout:
         BorderPane root = new BorderPane();
@@ -42,11 +54,11 @@ public class GuessWho extends Application {
         root.setLeft(menuContainer);
 
         // Create Board container (right) + add to root
-        GridPane boardContainer = createBoardContainer();
+        boardContainer = createBoardContainer();
         root.setCenter(boardContainer);
 
         // New game on start():
-        currentGame = new Game();
+        //currentGame = new Game();
         generateBoard();
 
         // Testing:
@@ -68,11 +80,14 @@ public class GuessWho extends Application {
         // Create the menu container
         VBox menuContainer = new VBox(10);
 
-        // Buttons etc.
+        // Create UI elements:
         Button askQuestionButton = new Button("Ask Question");
         Button restartButton = new Button("Restart");
+        ComboBox<String> questionComboBox = new ComboBox<>();
+        questionComboBox.setItems(FXCollections.observableArrayList(
+                "Hair Color", "Eye Color", "Accessories")); // question's categories
 
-        // Add CSS style class
+        // Set CSS style class
         menuContainer.getStyleClass().add("menu-container");
         restartButton.getStyleClass().add("restart-button");
         askQuestionButton.getStyleClass().add("ask-button");
@@ -81,14 +96,11 @@ public class GuessWho extends Application {
         restartButton.setOnAction(event -> {
             currentGame = new Game();
             System.out.println("Secret person is:" + currentGame.getSecretPerson());
-            generateBoard(); // needs to be defined
+            generateBoard();
         });
 
-        // Styling:
-        // menuContainer.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, null)));
-
         // Add UI elements to container:
-        menuContainer.getChildren().addAll(askQuestionButton, restartButton);
+        menuContainer.getChildren().addAll(restartButton, questionComboBox, askQuestionButton);
 
         return menuContainer;
     }
@@ -103,11 +115,62 @@ public class GuessWho extends Application {
     }
 
     private void generateBoard() {
-        // Reset // clear
-        // create UI elements + add to boardContainer
-            // Image + button for each character, arranged in columns/rows
+        // Clear & reset board of children elements:
+        boardContainer.getChildren().clear();
 
-        // Event handlers:
+        // create UI element for each character + add to boardContainer
+        int numColumns = 6; // Pre-defined the number of columns
+        int rowIndex = 0;
+        int columnIndex = 0;
+
+        for (Character character : currentGame.charactersInPlay) {
+            // Layout: CharacterPane that stacks character image + button
+            StackPane characterPane = new StackPane();
+
+            // UI elements: image + button for each character
+            ImageView characterImage = new ImageView(new Image(character.image));
+            Button characterButton = new Button(character.name);
+
+            // characterButton placement in the StackPane container:
+            StackPane.setAlignment(characterButton, Pos.BOTTOM_CENTER);
+            StackPane.setMargin(characterButton, new Insets(0, 5, 5, 0)); // bottom margin
+
+            // CSS style classes
+            characterButton.getStyleClass().add("character-button");
+            characterImage.getStyleClass().add("character-image");
+            characterPane.getStyleClass().add("character-pane");
+
+            // Event handlers:
+            characterButton.setOnAction(event -> {
+                // Handle button click
+                System.out.println("Clicked character: " + character.name);
+
+                boolean isGuessCorrect = currentGame.checkGuess(character.name);
+
+                if (isGuessCorrect) {
+                    System.out.println("Correct!"); // change to an allert? Followed by restart?
+                } else {
+                    System.out.println("Wrong!");
+                }
+            });
+
+            // Add the UI elements to the characterPane
+            characterPane.getChildren().addAll(characterImage, characterButton);
+
+            // Add the characterPaneContainer to the board container at the specified position
+            boardContainer.add(characterPane, columnIndex, rowIndex);
+
+            GridPane.setMargin(characterPane, new Insets(5, 5, 5, 5));
+
+            // Update column and row indices - moves to the next row, once a row is full.
+            // This is done every iteration to figure out placement of each individual characterPane
+            columnIndex++; // increment current columnIndex
+            if (columnIndex >= numColumns) {
+                columnIndex = 0;
+                rowIndex++; // increment current rowIndex
+            }
+        }
+
     }
 
 

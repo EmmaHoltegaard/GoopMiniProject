@@ -3,6 +3,45 @@
     -fx-background-color: pink;
 }
 
+.restart-button {}
+
+.ask-button {}
+
 .board-container {
     -fx-background-color: lightblue;
+    -fx-padding: 20px;
+}
+
+.character-pane {
+    /*-fx-border-color: black; /* Sets the border color to black */
+    /*-fx-border-width: 1px; /* Sets the border width to 1 pixel */
+    /*-fx-border-style: solid; /* Sets the border style to solid */
+    -fx-background-color: pink;
+    -fx-background-radius: 10; /* adjust this value to change the radius */
+}
+
+.character-pane:hover .character-button {
+    -fx-opacity: 1; /* Set opacity to 1 to show the button on hover */
+}
+
+.character-button {
+    -fx-opacity: 0; /* Set opacity to 0 to hide the button */
+    -fx-background-color: #4CAF50; /* Green background color */
+    -fx-border-color: darkgreen; /* Sets the border color to black */
+    -fx-border-width: 1px; /* Sets the border width to 1 pixel */
+    -fx-border-style: solid; /* Sets the border style to solid */
+    -fx-text-fill: white; /* White text color */
+    -fx-alignment: center; /* Center the text */
+    -fx-border-width: 0; /* Remove the border */
+    -fx-pref-width: 75px; /* Set preferred width */
+    -fx-pref-height: 20px; /* Set preferred height */
+}
+
+.character-button:hover {
+    -fx-background-color: darkgreen;
+}
+
+.character-image {
+    -fx-fit-width: 110px;
+    -fx-fit-height: 110px;
 }
