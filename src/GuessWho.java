@@ -60,7 +60,7 @@ public class GuessWho extends Application {
         // Testing:
         System.out.println("Secret person is:" + currentGame.getSecretPerson());
         for (Character character : currentGame.charactersInPlay) {
-            System.out.println(character.name);
+            System.out.println(character.getName());
         }
 
         // Set the scene and show the stage
@@ -86,6 +86,7 @@ public class GuessWho extends Application {
 
         Label prompt = new Label("Does the secret person have...");
 
+        // OBS: This combobox is not yet dynamic, but hard-coded to only handle the RegularCharacter subclass.
         ComboBox<String> questionComboBox = new ComboBox<>();
         // Add the "Choose one..." item
         questionComboBox.getItems().add("Choose one...");
@@ -100,6 +101,8 @@ public class GuessWho extends Application {
                 "Accessories: glasses", "Accessories: hats", "Accessories: facial hair");
         questionComboBox.getItems().addAll("Other: smoker");
         questionComboBox.getItems().addAll("Pets: parrot");
+        questionComboBox.getItems().addAll("Mood: Happy");
+        questionComboBox.getItems().addAll("This is a test");
 
 
 
@@ -158,12 +161,15 @@ public class GuessWho extends Application {
         for (Character character : currentGame.charactersInPlay) {
             // Layout: CharacterPane that stacks character image + button
             StackPane characterPane = new StackPane();
+            VBox characterPaneContainer = new VBox();
 
             // UI elements: image + button for each character
-            ImageView characterImage = new ImageView(new Image(character.image));
-            Button characterButton = new Button(character.name);
+            ImageView characterImage = new ImageView(new Image(character.getImage()));
+            Button characterButton = new Button("Guess");
+            Label characterName = new Label(character.getName());
 
-            // characterButton placement in the StackPane container:
+            // Layout within characterPaneContainer and characterPane:
+            characterName.setAlignment(Pos.CENTER);
             StackPane.setAlignment(characterButton, Pos.BOTTOM_CENTER);
             StackPane.setMargin(characterButton, new Insets(0, 5, 5, 0)); // bottom margin
 
@@ -171,11 +177,13 @@ public class GuessWho extends Application {
             characterButton.getStyleClass().add("character-button");
             characterImage.getStyleClass().add("character-image");
             characterPane.getStyleClass().add("character-pane");
+            characterPaneContainer.getStyleClass().add("character-pane-container");
+            characterName.getStyleClass().add("character-name");
 
             // Event handlers:
             characterButton.setOnAction(event -> {
                 // Handle button click
-                System.out.println("Clicked character: " + character.name);
+                System.out.println("Clicked character: " + character.getName());
 
                 boolean isGuessCorrect = currentGame.checkGuess(character);
 
@@ -187,13 +195,16 @@ public class GuessWho extends Application {
             });
 
             // Margin around characterPanes
-            GridPane.setMargin(characterPane, new Insets(5, 5, 5, 5));
+            GridPane.setMargin(characterPaneContainer, new Insets(5, 5, 5, 5));
+
+            // Add characterName + characterPane to characterPaneContainer
+            characterPaneContainer.getChildren().addAll(characterName, characterPane);
 
             // Add the UI elements to the characterPane
             characterPane.getChildren().addAll(characterImage, characterButton);
 
             // Add the characterPaneContainer to the board container at the specified position
-            boardContainer.add(characterPane, columnIndex, rowIndex);
+            boardContainer.add(characterPaneContainer, columnIndex, rowIndex);
 
 
             // Update column and row indices - moves to the next row, once a row is full.

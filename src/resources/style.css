@@ -1,25 +1,84 @@
 
 .menu-container {
-    -fx-background-color: pink;
+    -fx-background-color: #B0A6FF;
     -fx-padding: 20px;
 }
 
-.restart-button {}
+.restart-button {
+    -fx-background-color: #B0A6FF;
+    -fx-text-fill: #4b37ce;
+    -fx-text-weight: bold;
+    -fx-font-size: 14px;
+    -fx-alignment: center; /* Center the text */
+    -fx-border-width: 0; /* Remove the border */
+    -fx-pref-width: 90px; /* Set preferred width */
+    -fx-pref-height: 40px; /* Set preferred height */
+    -fx-background-radius: 10; /* adjust this value to change the radius */
+    -fx-border-radius: 10;
+    -fx-border-color: #4b37ce;
+    -fx-border-width: 2px; /* Sets the border width to 1 pixel */
+    -fx-border-style: solid; /* Sets the border style to solid */
+    }
 
-.ask-button {}
+.restart-button:hover {
+    -fx-background-color: #4b37ce;
+    -fx-text-fill: white;
+    -fx-background-radius: 10; /* adjust this value to change the radius */
+    -fx-border-radius: 10;
+}
 
+.ask-button {
+    -fx-background-color: #4b37ce; /* Purple background color */
+    -fx-text-fill: white; /* White text color */
+    -fx-text-weight: bold;
+    -fx-font-size: 18px;
+    -fx-alignment: center; /* Center the text */
+    -fx-border-width: 0; /* Remove the border */
+    -fx-pref-width: 90px; /* Set preferred width */
+    -fx-pref-height: 40px; /* Set preferred height */
+    -fx-background-radius: 10; /* adjust this value to change the radius */
+    -fx-border-radius: 10;
+    }
+
+.ask-button:hover {
+    -fx-background-color: #B0A6FF;
+    -fx-border-color: #4b37ce;
+    -fx-border-width: 1px; /* Sets the border width to 1 pixel */
+    -fx-border-style: solid; /* Sets the border style to solid */
+    -fx-text-fill: #4b37ce;
+    -fx-background-radius: 10; /* adjust this value to change the radius */
+    -fx-border-radius: 10;
+}
+/*jumps slightly on hover - fix later*/
+
+
+/* Classes related to the board */
 .board-container {
-    -fx-background-color: lightblue;
+    -fx-background-color: white;
     -fx-padding: 20px;
 }
 
-.character-pane {
+.character-pane-container {
     /*-fx-border-color: black; /* Sets the border color to black */
     /*-fx-border-width: 1px; /* Sets the border width to 1 pixel */
     /*-fx-border-style: solid; /* Sets the border style to solid */
-    -fx-background-color: pink;
+    -fx-background-color: #F4E8FF;
     -fx-background-radius: 10; /* adjust this value to change the radius */
 }
+
+.character-name {
+    -fx-alignment: center;
+    -fx-text-color: #A259FF;
+    -fx-text-size: 16px;
+    -fx-text-weight: bold;
+    -fx-border-color: black; /* Sets the border color to black */
+    -fx-border-width: 1px; /* Sets the border width to 1 pixel */
+    -fx-border-style: solid; /* Sets the border style to solid */
+}
+
+.character-pane {
+}
+
 
 .character-pane:hover .character-button {
     -fx-opacity: 1; /* Set opacity to 1 to show the button on hover */
@@ -27,7 +86,7 @@
 
 .character-button {
     -fx-opacity: 0; /* Set opacity to 0 to hide the button */
-    -fx-background-color: #4CAF50; /* Green background color */
+    -fx-background-color: #A259FF; /* Green background color */
     -fx-border-color: darkgreen; /* Sets the border color to black */
     -fx-border-width: 1px; /* Sets the border width to 1 pixel */
     -fx-border-style: solid; /* Sets the border style to solid */

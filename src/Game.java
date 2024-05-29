@@ -18,7 +18,6 @@ public class Game {
     private Character secretPerson;
     private int questionCount;
     private int questionLimit;
-    // public String[] allQuestions;  - list of all possible questions?
 
     // CONSTRUCTOR:
     public Game() {
@@ -39,9 +38,10 @@ public class Game {
 
     // returns name of secret person
     public String getSecretPerson() {
-        return secretPerson.name;
+        return secretPerson.getName();
     }
 
+    // OBS: This method is currently not dynamic, and therefore not setup to deal with different types of characters.
     public void checkQuestion(String question) {
         String category;
         String value;
@@ -51,6 +51,7 @@ public class Game {
         if (parts.length == 2) {
             category = parts[0].toLowerCase();
             value = parts[1].toLowerCase();
+            System.out.println("Category:" + category + ", Value: " + value);
 
             // Check for match between selected question & secretPerson's attributed - and invoke filterCharacters()
             // filterCharacters(true) = keep characters with selected attribute
@@ -59,32 +60,27 @@ public class Game {
                 String secretAttribute = secretPerson.getAttribute(category, String.class);
                 if (secretAttribute.equals(value)) {
                     filterCharacters(true, category, value);
-                    //updateQuestionCount();
-                    //System.out.println(questionCount);
                 } else {
-                    filterCharacters(false, category, value);
-                    //updateQuestionCount();
-                    //System.out.println(questionCount);
+                        filterCharacters(false, category, value);
                 }
             } else if (category.equals("accessories") || category.equals("other") || category.equals("pets")) {
                 String[] secretAttribute = secretPerson.getAttribute(category, String[].class);
                 if (Arrays.asList(secretAttribute).contains(value)) {
                     filterCharacters(true, category, value);
-                    //updateQuestionCount();
-                    //System.out.println(questionCount);
                 } else {
                     filterCharacters(false, category, value);
-                    //updateQuestionCount();
-                    //System.out.println(questionCount);
                 }
+            } else {
+                System.out.println("Category not valid");
             }
+
         } else {
-            System.out.println("Question check failed");
+            System.out.println("Invalid question format");
         }
     }
 
     public boolean checkGuess(Character guess) {
-        if (guess.name.equals(secretPerson.name)) {
+        if (guess.getName().equals(secretPerson.getName())) {
             return true;
         } else {
             return false;
@@ -102,21 +98,22 @@ public class Game {
         questionCount++;
     }
 
+
+    // NOT DONE - TRY FOR SIMPLER ALTERNATIVES OR JUST WRITE OUT COMMENTS SO FOR UNDERSTANDING IT!
     private void filterCharacters(boolean keep, String category, String value) {
-        // NOT DONE - TRY FOR SIMPLER ALTERNATIVES OR JUST WRITE OUT COMMENTS
         System.out.println("checkQuestion will filter based on " + category + " and " + value);
         updateQuestionCount();
         System.out.println(getQuestionCount());
 
         charactersInPlay.removeIf(person -> {
-            Object attribute = person.getAttribute(category, Object.class);
+                Object attribute = person.getAttribute(category, Object.class); // getAttribute requires try-catch because of eexceptop
 
-            if (attribute instanceof String) {
-                return attribute.equals(value) != keep;
-            } else if (attribute instanceof String[]) {
-                return Arrays.asList((String[]) attribute).contains(value) != keep;
-            }
-            return false;
+                if (attribute instanceof String) {
+                    return attribute.equals(value) != keep;
+                } else if (attribute instanceof String[]) {
+                    return Arrays.asList((String[]) attribute).contains(value) != keep;
+                }
+            return false; // Default to false if an exception occurs
         });
 
     }
@@ -125,31 +122,31 @@ public class Game {
         // Create new ArrayList:
         ArrayList<Character> allCharacters = new ArrayList<>();
 
-        // Add all characters
-        allCharacters.add(new Character("Jabala", "src/resources/images/jabala.png", "hidden", "hidden", new String[]{"glasses", "hats"}, new String[]{""}, new String[]{""}));
-        allCharacters.add(new Character("Jack", "src/resources/images/jack.png", "hidden", "blue", new String[]{"hats", "facial hair"}, new String[]{""}, new String[]{"parrot"}));
-        allCharacters.add(new Character("Jacques", "src/resources/images/jacques.png", "grey", "blue", new String[]{"hats", "facial hair"}, new String[]{"smoker"}, new String[]{""}));
-        allCharacters.add(new Character("Jai", "src/resources/images/jai.png", "black", "brown", new String[]{}, new String[]{}, new String[]{}));
-        allCharacters.add(new Character("Jake", "src/resources/images/jake.png", "yellow", "green", new String[]{"glasses"}, new String[]{}, new String[]{}));
-        allCharacters.add(new Character("James", "src/resources/images/james.png", "brown", "green", new String[]{"glasses", "facial-hair"}, new String[]{}, new String[]{}));
-        allCharacters.add(new Character("Jana", "src/resources/images/jana.png", "black", "hidden", new String[]{"glasses"}, new String[]{}, new String[]{}));
-        allCharacters.add(new Character("Jane", "src/resources/images/jane.png", "yellow", "hidden", new String[]{"glasses"}, new String[]{}, new String[]{}));
-        allCharacters.add(new Character("Jaqueline", "src/resources/images/jaqueline.png", "orange", "green", new String[]{"glasses"}, new String[]{}, new String[]{}));
-        allCharacters.add(new Character("Jazebelle", "src/resources/images/jazebelle.png", "purple", "hidden", new String[]{"glasses"}, new String[]{"smoker"}, new String[]{}));
-        allCharacters.add(new Character("Jean", "src/resources/images/jean.png", "brown", "blue", new String[]{"glasses", "hats", "facial-hair"}, new String[]{"smoker"}, new String[]{}));
-        allCharacters.add(new Character("Jeane", "src/resources/images/jeane.png", "brown", "green", new String[]{"glasses"}, new String[]{}, new String[]{}));
-        allCharacters.add(new Character("Jed", "src/resources/images/jed.png", "orange", "green", new String[]{"glasses", "hats", "facial-hair"}, new String[]{"smoker"}, new String[]{}));
-        allCharacters.add(new Character("Jenni", "src/resources/images/jenni.png", "white", "hidden", new String[]{"hats"}, new String[]{}, new String[]{}));
-        allCharacters.add(new Character("Jeri", "src/resources/images/jeri.png", "orange", "green", new String[]{"glasses"}, new String[]{}, new String[]{}));
-        allCharacters.add(new Character("Jerry", "src/resources/images/jerry.png", "hidden", "blue", new String[]{"hats"}, new String[]{}, new String[]{}));
-        allCharacters.add(new Character("Jess", "src/resources/images/jess.png", "black", "blue", new String[]{"glasses"}, new String[]{}, new String[]{}));
-        allCharacters.add(new Character("Jocelyn", "src/resources/images/jocelyn.png", "black", "brown", new String[]{"glasses"}, new String[]{}, new String[]{}));
-        allCharacters.add(new Character("Jon", "src/resources/images/jon.png", "brown", "green", new String[]{"glasses"}, new String[]{}, new String[]{}));
-        allCharacters.add(new Character("Jordan", "src/resources/images/jordan.png", "yellow", "hidden", new String[]{"glasses", "hats"}, new String[]{}, new String[]{}));
-        allCharacters.add(new Character("Josephine", "src/resources/images/josephine.png", "grey", "brown", new String[]{}, new String[]{}, new String[]{}));
-        allCharacters.add(new Character("Josh", "src/resources/images/josh.png", "yellow", "green", new String[]{}, new String[]{}, new String[]{}));
-        allCharacters.add(new Character("Jude", "src/resources/images/jude.png", "black", "green", new String[]{"facial-hair"}, new String[]{}, new String[]{}));
-        allCharacters.add(new Character("Julie", "src/resources/images/julie.png", "black", "brown", new String[]{"glasses", "hats"}, new String[]{}, new String[]{}));
+        // Add all characters (regular characters edition)
+        allCharacters.add(new RegularCharacter("Jabala", "src/resources/images/jabala.png", "hidden", "hidden", new String[]{"glasses", "hats"}, new String[]{""}, new String[]{""}));
+        allCharacters.add(new RegularCharacter("Jack", "src/resources/images/jack.png", "hidden", "blue", new String[]{"hats", "facial hair"}, new String[]{""}, new String[]{"parrot"}));
+        allCharacters.add(new RegularCharacter("Jacques", "src/resources/images/jacques.png", "grey", "blue", new String[]{"hats", "facial hair"}, new String[]{"smoker"}, new String[]{""}));
+        allCharacters.add(new RegularCharacter("Jai", "src/resources/images/jai.png", "black", "brown", new String[]{}, new String[]{}, new String[]{}));
+        allCharacters.add(new RegularCharacter("Jake", "src/resources/images/jake.png", "yellow", "green", new String[]{"glasses"}, new String[]{}, new String[]{}));
+        allCharacters.add(new RegularCharacter("James", "src/resources/images/james.png", "brown", "green", new String[]{"glasses", "facial-hair"}, new String[]{}, new String[]{}));
+        allCharacters.add(new RegularCharacter("Jana", "src/resources/images/jana.png", "black", "hidden", new String[]{"glasses"}, new String[]{}, new String[]{}));
+        allCharacters.add(new RegularCharacter("Jane", "src/resources/images/jane.png", "yellow", "hidden", new String[]{"glasses"}, new String[]{}, new String[]{}));
+        allCharacters.add(new RegularCharacter("Jaqueline", "src/resources/images/jaqueline.png", "orange", "green", new String[]{"glasses"}, new String[]{}, new String[]{}));
+        allCharacters.add(new RegularCharacter("Jazebelle", "src/resources/images/jazebelle.png", "purple", "hidden", new String[]{"glasses"}, new String[]{"smoker"}, new String[]{}));
+        allCharacters.add(new RegularCharacter("Jean", "src/resources/images/jean.png", "brown", "blue", new String[]{"glasses", "hats", "facial-hair"}, new String[]{"smoker"}, new String[]{}));
+        allCharacters.add(new RegularCharacter("Jeane", "src/resources/images/jeane.png", "brown", "green", new String[]{"glasses"}, new String[]{}, new String[]{}));
+        allCharacters.add(new RegularCharacter("Jed", "src/resources/images/jed.png", "orange", "green", new String[]{"glasses", "hats", "facial-hair"}, new String[]{"smoker"}, new String[]{}));
+        allCharacters.add(new RegularCharacter("Jenni", "src/resources/images/jenni.png", "white", "hidden", new String[]{"hats"}, new String[]{}, new String[]{}));
+        allCharacters.add(new RegularCharacter("Jeri", "src/resources/images/jeri.png", "orange", "green", new String[]{"glasses"}, new String[]{}, new String[]{}));
+        allCharacters.add(new RegularCharacter("Jerry", "src/resources/images/jerry.png", "hidden", "blue", new String[]{"hats"}, new String[]{}, new String[]{}));
+        allCharacters.add(new RegularCharacter("Jess", "src/resources/images/jess.png", "black", "blue", new String[]{"glasses"}, new String[]{}, new String[]{}));
+        allCharacters.add(new RegularCharacter("Jocelyn", "src/resources/images/jocelyn.png", "black", "brown", new String[]{"glasses"}, new String[]{}, new String[]{}));
+        allCharacters.add(new RegularCharacter("Jon", "src/resources/images/jon.png", "brown", "green", new String[]{"glasses"}, new String[]{}, new String[]{}));
+        allCharacters.add(new RegularCharacter("Jordan", "src/resources/images/jordan.png", "yellow", "hidden", new String[]{"glasses", "hats"}, new String[]{}, new String[]{}));
+        allCharacters.add(new RegularCharacter("Josephine", "src/resources/images/josephine.png", "grey", "brown", new String[]{}, new String[]{}, new String[]{}));
+        allCharacters.add(new RegularCharacter("Josh", "src/resources/images/josh.png", "yellow", "green", new String[]{}, new String[]{}, new String[]{}));
+        allCharacters.add(new RegularCharacter("Jude", "src/resources/images/jude.png", "black", "green", new String[]{"facial-hair"}, new String[]{}, new String[]{}));
+        allCharacters.add(new RegularCharacter("Julie", "src/resources/images/julie.png", "black", "brown", new String[]{"glasses", "hats"}, new String[]{}, new String[]{}));
 
         // Return the full list w. ALL characters
         return allCharacters;
