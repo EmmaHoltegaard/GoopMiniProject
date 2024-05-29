@@ -1,5 +1,10 @@
 package src;
 
+/**
+ * Represents a Harry Potter character.
+ * Harry Potters characters inherit attributes and behavior from the Character superclass.
+ * They have additional attributes such as hair color, blood status, Hogwarts house, patronus, pets, etc.
+ */
 public class HarryPotterCharacter extends Character {
     private String hair;
     private String[] status;
@@ -17,7 +22,6 @@ public class HarryPotterCharacter extends Character {
         this.patronus = patronus;
         this.pets = pets;
     }
-
 
     @Override
     public <T> T getAttribute(String category, Class<T> type) {

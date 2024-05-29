@@ -1,6 +1,5 @@
 package src;
 
-
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,66 +12,84 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-/* This class will be the main class. It will be responsible for connecting UI to Game functionality
-+ creating all constant elements in GUI (everything except characters)
-+ initialise/call things from other classes.
-+ generateBoard()
-    Creates UI elements based on the current CharactersInPlat (either init or filtered version)
-+ Connect buttons and stuff to things from Game
-    - Showing all characters
-    - Show all questions in a dropdown
-    - Buttons (restart, guess, select question...)
+
+/**
+ * This class represents the game board.
+ * The class is responsible for creating all UI elements and connecting them to game logic/actions from the Game class.
  */
-
-// Build all constant UI elements:
-// Menu of questions
-// Ask-button
-// restart button (styling)
-
 public class GuessWho extends Application {
 
     //Instance variables:
+    /**
+     * Hold the game object representing the current game
+     */
     Game currentGame;
+    /**
+     * The container for the board, which shows the characters currently in play.
+     */
     GridPane boardContainer; // must be inst. var. to be accessible in generateBoard as well as start()
 
-    // start()
 
+    /**
+     * Starts the application by initializing a new game and setting up the primary stage.
+     *
+     * @param primaryStage the primary stage for this application, onto which
+     * the application scene can be set.
+     * Applications may create other stages, if needed, but they will not be
+     * primary stages.
+     * @throws Exception if an error occurs during application initialization.
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
+        try {
+            currentGame = new Game();
 
-        currentGame = new Game();
+            // Exception-test: accessing an array index that doesn't exist
+            //int[] array = new int[3];
+            //System.out.println(array[4]); // This will throw an Exception
 
-        // Create root layout:
-        BorderPane root = new BorderPane();
+            // Create root layout:
+            BorderPane root = new BorderPane();
 
-        // Create Menu container (left) + add to root
-        VBox menuContainer = createMenuContainer(); // Vertical box
-        root.setLeft(menuContainer);
+            // Create Menu container (left) + add to root
+            VBox menuContainer = createMenuContainer(); // Vertical box
+            root.setLeft(menuContainer);
 
-        // Create Board container (right) + add to root
-        boardContainer = createBoardContainer();
-        root.setCenter(boardContainer);
+            // Create Board container (right) + add to root
+            boardContainer = createBoardContainer();
+            root.setCenter(boardContainer);
 
-        // New game on start():
-        //currentGame = new Game();
-        generateBoard();
+            // New game on start():
+            //currentGame = new Game();
+            generateBoard();
 
-        // Testing:
-        System.out.println("Secret person is:" + currentGame.getSecretPerson());
-        for (Character character : currentGame.charactersInPlay) {
-            System.out.println(character.getName());
+            // Testing:
+            System.out.println("Secret person is:" + currentGame.getSecretCharacter());
+            for (Character character : currentGame.charactersInPlay) {
+                System.out.println(character.getName());
+            }
+
+            // Set the scene and show the stage
+            Scene scene = new Scene(root, 970, 625);
+            scene.getStylesheets().add("style.css"); // Applies CSS file
+            primaryStage.setScene(scene);
+            primaryStage.setTitle("Guess Who");
+            primaryStage.show();
+            System.out.println("Scene set");
+
+        } catch (Exception e) {
+            // Handle any exceptions that occur during application initialization
+            System.out.println("An error occurred during startup: " + e.getMessage());
         }
-
-        // Set the scene and show the stage
-        Scene scene = new Scene(root, 950, 520);
-        scene.getStylesheets().add("style.css"); // Applies CSS file
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Guess Who");
-        primaryStage.show();
-        System.out.println("Scene set");
     }
 
-    // Menu Container:
+    /**
+     * Creates all UI elements for the game menu.
+     * This menu includes a restart button, a dropdown of possible questions, an ask button
+     * and a counter showing how many questions have been asked by the player.
+     * NB: The question-dropdown is not dynamic in this iteration, but hard coded with questions for BasicCharater objects.
+     * @return a VBox containing the menu UI elements.
+     */
     private VBox createMenuContainer() {
         // Create the menu container
         VBox menuContainer = new VBox(10);
@@ -82,11 +99,11 @@ public class GuessWho extends Application {
 
         Button restartButton = new Button("Restart");
 
-        Label questionCount = new Label("Questions asked: " + currentGame.getQuestionCount());
+        Label questionCount = new Label("Questions asked: " + currentGame.getQuestionCount() + " / " + currentGame.getQuestionLimit());
 
         Label prompt = new Label("Does the secret person have...");
 
-        // OBS: This combobox is not yet dynamic, but hard-coded to only handle the RegularCharacter subclass.
+        // OBS: This combobox is not yet dynamic, but hard-coded to only handle the BasicCharacter subclass.
         ComboBox<String> questionComboBox = new ComboBox<>();
         // Add the "Choose one..." item
         questionComboBox.getItems().add("Choose one...");
@@ -101,32 +118,41 @@ public class GuessWho extends Application {
                 "Accessories: glasses", "Accessories: hats", "Accessories: facial hair");
         questionComboBox.getItems().addAll("Other: smoker");
         questionComboBox.getItems().addAll("Pets: parrot");
-        questionComboBox.getItems().addAll("Mood: Happy");
-        questionComboBox.getItems().addAll("This is a test");
-
+        //questionComboBox.getItems().addAll("Test: Test");
+        //questionComboBox.getItems().addAll("This is a test");
 
 
         // Set CSS style class
         menuContainer.getStyleClass().add("menu-container");
         restartButton.getStyleClass().add("restart-button");
         askQuestionButton.getStyleClass().add("ask-button");
+        questionComboBox.getStyleClass().add("question-combo-box");
 
         // Event handlers:
         restartButton.setOnAction( event -> {
             currentGame = new Game();
-            System.out.println("Secret person is:" + currentGame.getSecretPerson());
+            System.out.println("Secret person is:" + currentGame.getSecretCharacter());
             generateBoard();
-            questionCount.setText("Questions asked: " + currentGame.getQuestionCount()); // update question count in UI
+            questionCount.setText("Questions asked: " + currentGame.getQuestionCount() + " / " + currentGame.getQuestionLimit()); // update question count in UI
+            askQuestionButton.setDisable(false); // reactivate ask-button
         });
 
         // Set up action for when an option is selected
         askQuestionButton.setOnAction(event -> {
             String selectedOption = questionComboBox.getValue();
             System.out.println("Selected question is " + selectedOption);
+
             if (!selectedOption.equals("Choose one...")) {
-                currentGame.checkQuestion(selectedOption);
-                questionCount.setText("Questions asked: " + currentGame.getQuestionCount()); // update questionCount
-                generateBoard();
+                if(currentGame.getQuestionCount() < currentGame.getQuestionLimit()) {
+                    currentGame.checkQuestion(selectedOption);
+                    questionCount.setText("Questions asked: " + currentGame.getQuestionCount() + " / " + currentGame.getQuestionLimit()); // update questionCount
+                    generateBoard();
+
+                    // Once limit is reached, disable
+                    if (currentGame.getQuestionCount() >= currentGame.getQuestionLimit()) {
+                        askQuestionButton.setDisable(true);
+                        System.out.println("Question limit has been reached");}
+                }
             } else {
                 System.out.println("Please select a question from the drop-down");
             }
@@ -138,7 +164,10 @@ public class GuessWho extends Application {
         return menuContainer;
     }
 
-    // boardContainer
+    /**
+     * Creates the container for the game board
+     * @return A GridPane that will any board made with the generateBoard() method.
+     */
     private GridPane createBoardContainer() {
         GridPane boardContainer = new GridPane(); // flexible layout
 
@@ -148,7 +177,10 @@ public class GuessWho extends Application {
         return boardContainer;
     }
 
-    // contents of board:
+    /**
+     * Generates the UI elements for the game board,
+     * including name, image and guess-button for each character currently in play.
+     */
     private void generateBoard() {
         // Clear & reset board of child elements:
         boardContainer.getChildren().clear();
@@ -159,9 +191,9 @@ public class GuessWho extends Application {
         int columnIndex = 0;
 
         for (Character character : currentGame.charactersInPlay) {
-            // Layout: CharacterPane that stacks character image + button
-            StackPane characterPane = new StackPane();
+            // Layout: characterPaneContainer and characterPane that stacks character image + button
             VBox characterPaneContainer = new VBox();
+            StackPane characterPane = new StackPane();
 
             // UI elements: image + button for each character
             ImageView characterImage = new ImageView(new Image(character.getImage()));
@@ -169,9 +201,11 @@ public class GuessWho extends Application {
             Label characterName = new Label(character.getName());
 
             // Layout within characterPaneContainer and characterPane:
-            characterName.setAlignment(Pos.CENTER);
             StackPane.setAlignment(characterButton, Pos.BOTTOM_CENTER);
-            StackPane.setMargin(characterButton, new Insets(0, 5, 5, 0)); // bottom margin
+            StackPane.setMargin(characterButton, new Insets(0, 0, 5, 0)); // bottom margin
+            characterPaneContainer.setAlignment(Pos.TOP_CENTER); // Align the container at the top center
+            VBox.setMargin(characterName, new Insets(5, 0, 5, 0)); // Add spacing between elements
+            characterName.setAlignment(Pos.TOP_CENTER);
 
             // CSS style classes
             characterButton.getStyleClass().add("character-button");
@@ -229,3 +263,21 @@ public class GuessWho extends Application {
 //      - checkQuestion() + generateBoard (new)
 //      - isGuessCorrect()/Checks if guess is correct
 // A win/lose display of some kind, depending on what happens in isGuessCorrect()
+
+
+// Copied from the top:
+/* This class will be the main class. It will be responsible for connecting UI to Game functionality
++ creating all constant elements in GUI (everything except characters)
++ initialise/call things from other classes.
++ generateBoard()
+    Creates UI elements based on the current CharactersInPlat (either init or filtered version)
++ Connect buttons and stuff to things from Game
+    - Showing all characters
+    - Show all questions in a dropdown
+    - Buttons (restart, guess, select question...)
+ */
+
+// Build all constant UI elements:
+// Menu of questions
+// Ask-button
+// restart button (styling)

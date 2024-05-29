@@ -1,4 +1,18 @@
+/* UNIVERSAL STYLES */
+* {
+-fx-font-family: "Helvetica";
+}
 
+/*
+Colours:
+Menu background/ light purple: #B0A6FF
+Character-pane background/ light pink: #F4E8FF
+Dark purple: #4b37ce
+disabled button: #978ee5
+
+*%
+
+/* GAME MENU */
 .menu-container {
     -fx-background-color: #B0A6FF;
     -fx-padding: 20px;
@@ -7,12 +21,12 @@
 .restart-button {
     -fx-background-color: #B0A6FF;
     -fx-text-fill: #4b37ce;
-    -fx-text-weight: bold;
+    -fx-font-weight: bold;
     -fx-font-size: 14px;
     -fx-alignment: center; /* Center the text */
     -fx-border-width: 0; /* Remove the border */
-    -fx-pref-width: 90px; /* Set preferred width */
-    -fx-pref-height: 40px; /* Set preferred height */
+    -fx-pref-width: 70px; /* Set preferred width */
+    -fx-pref-height: 20px; /* Set preferred height */
     -fx-background-radius: 10; /* adjust this value to change the radius */
     -fx-border-radius: 10;
     -fx-border-color: #4b37ce;
@@ -27,14 +41,50 @@
     -fx-border-radius: 10;
 }
 
+.question-combo-box {
+    -fx-font-size: 14px;
+}
+
+.question-combo-box:focused {
+    -fx-focus-color: #B0A6FF; /* focus color */
+}
+
+.question-combo-box .list-view {
+    -fx-background-color: #F4E8FF;
+}
+
+.combo-box .list-view .list-cell {
+    -fx-background-color: #F4E8FF;
+}
+
+.combo-box .list-view .list-cell:hover {
+    -fx-background-color: #4b37ce; /* Background color on option when hovered */
+    -fx-text-fill: white;
+}
+
+.combo-box .list-view .list-cell:selected {
+    -fx-background-color: #4b37ce; /* Background color on option when selected */
+    -fx-text-fill: white;
+}
+
+.question-combo-box .combo-box-base {
+    -fx-background-color: #F4E8FF;
+    -fx-text-fill: #4b37ce;
+}
+
+.question-combo-box .combo-box-base:hover {
+    -fx-background-color: F4E8FF; /* Background color */
+}
+
+
 .ask-button {
     -fx-background-color: #4b37ce; /* Purple background color */
     -fx-text-fill: white; /* White text color */
-    -fx-text-weight: bold;
+    -fx-font-weight: bold;
     -fx-font-size: 18px;
     -fx-alignment: center; /* Center the text */
     -fx-border-width: 0; /* Remove the border */
-    -fx-pref-width: 90px; /* Set preferred width */
+    -fx-pref-width: 80px; /* Set preferred width */
     -fx-pref-height: 40px; /* Set preferred height */
     -fx-background-radius: 10; /* adjust this value to change the radius */
     -fx-border-radius: 10;
@@ -51,8 +101,11 @@
 }
 /*jumps slightly on hover - fix later*/
 
+.ask-button:disabled {
+    -fx-background-color: #978ee5;
+}
 
-/* Classes related to the board */
+/* THE BOARD */
 .board-container {
     -fx-background-color: white;
     -fx-padding: 20px;
@@ -69,11 +122,8 @@
 .character-name {
     -fx-alignment: center;
     -fx-text-color: #A259FF;
-    -fx-text-size: 16px;
-    -fx-text-weight: bold;
-    -fx-border-color: black; /* Sets the border color to black */
-    -fx-border-width: 1px; /* Sets the border width to 1 pixel */
-    -fx-border-style: solid; /* Sets the border style to solid */
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
 }
 
 .character-pane {
@@ -95,6 +145,8 @@
     -fx-border-width: 0; /* Remove the border */
     -fx-pref-width: 75px; /* Set preferred width */
     -fx-pref-height: 20px; /* Set preferred height */
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
 }
 
 .character-button:hover {
