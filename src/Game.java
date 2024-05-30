@@ -27,16 +27,19 @@ public class Game {
      */
     private int questionLimit;
 
+    private String message;
+
    //CONSTRUCTOR
     /**
      * Construct a Game object.
      * Calling this constructor starts a new game by initialising a character-list, setting a secret character and setting the question count to 0.
      */
     public Game() {
-        charactersInPlay = initializeCharacterList(); // Assign new (full) list to charactersInPlay
-        secretCharacter = setSecretCharacter(charactersInPlay); // Choose secretPerson from the initial full list of characters
-        questionCount = 0; // reset guessCount
-        questionLimit = 5; // decide question limit
+        this.charactersInPlay = initializeCharacterList(); // Assign new (full) list to charactersInPlay
+        this.secretCharacter = setSecretCharacter(charactersInPlay); // Choose secretPerson from the initial full list of characters
+        this.questionCount = 0; // reset guessCount
+        this.questionLimit = 5; // decide question limit
+        this.message = "Go ahead an ask a question from the menu!";
     }
 
     // METHODS:
@@ -66,6 +69,10 @@ public class Game {
         return secretCharacter.getName();
     }
 
+    public String getMessage() {
+        return message;
+    }
+
     /**
      * Checks the selected question against the secret character, by splitting it into category and value,
      * and then checking if the secret character's attributes match the selected values.
@@ -93,9 +100,11 @@ public class Game {
             if (category.equals("hair") || category.equals("eyes")) {
                 String secretAttribute = secretCharacter.getAttribute(category, String.class);
                 if (secretAttribute.equals(value)) {
+                    message = "Yes, the secret character has " + value + " " + category;
                     filterCharacters(true, category, value);
                 } else {
-                        filterCharacters(false, category, value);
+                    message = "No, the secret character does not have " + value + " " + category;
+                    filterCharacters(false, category, value);
                 }
             } else if (category.equals("accessories") || category.equals("other") || category.equals("pets")) {
                 String[] secretAttribute = secretCharacter.getAttribute(category, String[].class);
@@ -106,10 +115,12 @@ public class Game {
                 }
             } else {
                 System.out.println("Category not valid");
+                message = "Category is not valid";
             }
 
         } else {
             System.out.println("Invalid question format");
+            message = "Invalid question format";
         }
     }
 
@@ -121,8 +132,10 @@ public class Game {
      */
     public boolean checkGuess(Character guess) {
         if (guess.getName().equals(secretCharacter.getName())) {
+            message = "Correct!";
             return true;
         } else {
+            message = "Wrong!";
             return false;
         }
     }

@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 
@@ -28,6 +29,8 @@ public class GuessWho extends Application {
      * The container for the board, which shows the characters currently in play.
      */
     GridPane boardContainer; // must be inst. var. to be accessible in generateBoard as well as start()
+
+    Text playerMessage;
 
 
     /**
@@ -103,6 +106,10 @@ public class GuessWho extends Application {
 
         Label prompt = new Label("Does the secret person have...");
 
+        playerMessage = new Text(currentGame.getMessage());
+
+
+
         // OBS: This combobox is not yet dynamic, but hard-coded to only handle the BasicCharacter subclass.
         ComboBox<String> questionComboBox = new ComboBox<>();
         // Add the "Choose one..." item
@@ -121,12 +128,16 @@ public class GuessWho extends Application {
         //questionComboBox.getItems().addAll("Test: Test");
         //questionComboBox.getItems().addAll("This is a test");
 
+        // Layout:
+        playerMessage.setWrappingWidth(150); // width on message
+
 
         // Set CSS style class
         menuContainer.getStyleClass().add("menu-container");
         restartButton.getStyleClass().add("restart-button");
         askQuestionButton.getStyleClass().add("ask-button");
         questionComboBox.getStyleClass().add("question-combo-box");
+        playerMessage.getStyleClass().add("player-message");
 
         // Event handlers:
         restartButton.setOnAction( event -> {
@@ -135,6 +146,7 @@ public class GuessWho extends Application {
             generateBoard();
             questionCount.setText("Questions asked: " + currentGame.getQuestionCount() + " / " + currentGame.getQuestionLimit()); // update question count in UI
             askQuestionButton.setDisable(false); // reactivate ask-button
+            updatePlayerMessage();
         });
 
         // Set up action for when an option is selected
@@ -146,9 +158,10 @@ public class GuessWho extends Application {
                 if(currentGame.getQuestionCount() < currentGame.getQuestionLimit()) {
                     currentGame.checkQuestion(selectedOption);
                     questionCount.setText("Questions asked: " + currentGame.getQuestionCount() + " / " + currentGame.getQuestionLimit()); // update questionCount
+                    updatePlayerMessage();
                     generateBoard();
 
-                    // Once limit is reached, disable
+                    // Once limit is reached, disable ask button
                     if (currentGame.getQuestionCount() >= currentGame.getQuestionLimit()) {
                         askQuestionButton.setDisable(true);
                         System.out.println("Question limit has been reached");}
@@ -159,7 +172,7 @@ public class GuessWho extends Application {
         });
 
         // Add UI elements to container:
-        menuContainer.getChildren().addAll(restartButton, prompt, questionComboBox, askQuestionButton, questionCount);
+        menuContainer.getChildren().addAll(restartButton, prompt, questionComboBox, askQuestionButton, questionCount, playerMessage);
 
         return menuContainer;
     }
@@ -175,6 +188,13 @@ public class GuessWho extends Application {
         boardContainer.getStyleClass().add("board-container");
 
         return boardContainer;
+    }
+
+    /**
+     * Displays the content of player message to the most recent game message
+     */
+    private void updatePlayerMessage(){
+        playerMessage.setText(currentGame.getMessage());
     }
 
     /**
