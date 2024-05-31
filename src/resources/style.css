@@ -138,10 +138,7 @@ disabled button: #978ee5
 
 .character-button {
     -fx-opacity: 0; /* Set opacity to 0 to hide the button */
-    -fx-background-color: #A259FF; /* Green background color */
-    -fx-border-color: darkgreen; /* Sets the border color to black */
-    -fx-border-width: 1px; /* Sets the border width to 1 pixel */
-    -fx-border-style: solid; /* Sets the border style to solid */
+    -fx-background-color: #4b37ce; /* Green background color */
     -fx-text-fill: white; /* White text color */
     -fx-alignment: center; /* Center the text */
     -fx-border-width: 0; /* Remove the border */
@@ -152,7 +149,8 @@ disabled button: #978ee5
 }
 
 .character-button:hover {
-    -fx-background-color: darkgreen;
+    -fx-background-color: #392d9b;
+    -fx-cursor: hand;
 }
 
 .character-image {
@@ -162,10 +160,11 @@ disabled button: #978ee5
 
 /* Result display */
 .result-container {
-    -fx-background-color: green;
+    -fx-background-color: #F4E8FF;
 }
 
 .result-message {
-    -fx-background-color: yellow;
-
+    -fx-background-color: #F4E8FF;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
 }

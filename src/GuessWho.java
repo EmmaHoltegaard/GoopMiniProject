@@ -1,10 +1,8 @@
 package src;
 
 import javafx.application.Application;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -31,16 +29,16 @@ public class GuessWho extends Application {
     /**
      * The container for the board, which shows the characters currently in play.
      */
-    GridPane boardContainer; // must be inst. var. to be accessible in generateBoard as well as start()
+    StackPane boardContainer; // must be inst. var. to be accessible in generateBoard as well as start()
 
     /**
      * A message to player based on their latest action
      */
     Text playerMessage;
 
+    Text limitWarning;
+
     Button askQuestionButton;
-
-
 
 
     /**
@@ -118,6 +116,8 @@ public class GuessWho extends Application {
 
         playerMessage = new Text(currentGame.getMessage());
 
+        limitWarning = new Text();
+
 
 
         // OBS: This combobox is not yet dynamic, but hard-coded to only handle the BasicCharacter subclass.
@@ -140,6 +140,7 @@ public class GuessWho extends Application {
 
         // Layout:
         playerMessage.setWrappingWidth(150); // width on message
+        limitWarning.setWrappingWidth(150);
 
 
         // Add CSS style classes
@@ -148,6 +149,7 @@ public class GuessWho extends Application {
         askQuestionButton.getStyleClass().add("ask-button");
         questionComboBox.getStyleClass().add("question-combo-box");
         playerMessage.getStyleClass().add("player-message");
+        limitWarning.getStyleClass().add("limit-warning");
 
         // Event handlers:
         restartButton.setOnAction( event -> {
@@ -156,6 +158,7 @@ public class GuessWho extends Application {
             generateBoard();
             questionCount.setText("Questions asked: " + currentGame.getQuestionCount() + " / " + currentGame.getQuestionLimit()); // update question count in UI
             askQuestionButton.setDisable(false); // reactivate ask-button
+            limitWarning.setText(""); // remove question limit warning
             updatePlayerMessage();
         });
 
@@ -174,19 +177,19 @@ public class GuessWho extends Application {
                     // Once question limit is reached, disable ask button
                     if (currentGame.getQuestionCount() >= currentGame.getQuestionLimit()) {
                         askQuestionButton.setDisable(true);
-                        System.out.println("Question limit has been reached");}
-                        // Print some kind of message - but not in player message.
+                        // System.out.println("Question limit has been reached");
+                        limitWarning.setText("You cannot ask anymore questions. It's time to make a guess!");
+                    }
                 }
             } else {
                 askQuestionButton.setDisable(true);
-                // currentGame.setMessage("You cannot ask anymore questions. It's time to make a guess!");
                 playerMessage.setText(currentGame.getMessage());
-                System.out.println("Please select a question from the drop-down");
+                // System.out.println("Please select a question from the drop-down");
             }
         });
 
         // Add UI elements to container:
-        menuContainer.getChildren().addAll(restartButton, prompt, questionComboBox, askQuestionButton, questionCount, playerMessage);
+        menuContainer.getChildren().addAll(restartButton, prompt, questionComboBox, askQuestionButton, questionCount, playerMessage, limitWarning);
 
         return menuContainer;
     }
@@ -195,8 +198,8 @@ public class GuessWho extends Application {
      * Creates the container for the game board
      * @return A GridPane that will any board made with the generateBoard() method.
      */
-    private GridPane createBoardContainer() {
-        GridPane boardContainer = new GridPane(); // flexible layout
+    private StackPane createBoardContainer() {
+        StackPane boardContainer = new StackPane(); // flexible layout
 
         // Set CSS style class
         boardContainer.getStyleClass().add("board-container");
@@ -250,12 +253,11 @@ public class GuessWho extends Application {
 
         // Display correct message:
         if (isCorrect) {
-            resultMessage.setText("You guess is correct! The secret character is " + character.getName() + ":");
+            resultMessage.setText("Correct! The secret character is " + character.getName() + ":");
 
         } else {
-            resultMessage.setText("Wrong guess! " + character.getName() + "is NOT the secret character - but " + currentGame.getSecretCharacter().getName() + " is:");
+            resultMessage.setText("Wrong! " + character.getName() + " is NOT the secret character - but " + currentGame.getSecretCharacter().getName() + " is:");
         }
-
 
         // Add to UI
         resultContainer.getChildren().addAll(resultMessage, secretCharacterImage);
@@ -270,6 +272,8 @@ public class GuessWho extends Application {
     private void generateBoard() {
         clearBoard();
 
+        GridPane innerBoardContainer = new GridPane();
+        boardContainer.getChildren().add(innerBoardContainer);
 
         // create UI element for each character + add to boardContainer
         int numColumns = 6; // Pre-defined the number of columns
@@ -318,7 +322,7 @@ public class GuessWho extends Application {
             characterPane.getChildren().addAll(characterImage, characterButton);
 
             // Add the characterPaneContainer to the board container w. specified position
-            boardContainer.add(characterPaneContainer, columnIndex, rowIndex);
+            innerBoardContainer.add(characterPaneContainer, columnIndex, rowIndex);
 
 
             // Update column and row indices - moves to the next row, once a row is full.
@@ -331,32 +335,5 @@ public class GuessWho extends Application {
         }
     } // end of generateBoard()
 
-
 } // end of Main
 
-// generateBoard()
-//      Create GUI elements for all characters currently in CharactersInPlay
-// Call methods from Game:
-// Connected to buttons:
-//      - updateGuessCounter (also in GUI)
-//      - checkQuestion() + generateBoard (new)
-//      - isGuessCorrect()/Checks if guess is correct
-// A win/lose display of some kind, depending on what happens in isGuessCorrect()
-
-
-// Copied from the top:
-/* This class will be the main class. It will be responsible for connecting UI to Game functionality
-+ creating all constant elements in GUI (everything except characters)
-+ initialise/call things from other classes.
-+ generateBoard()
-    Creates UI elements based on the current CharactersInPlat (either init or filtered version)
-+ Connect buttons and stuff to things from Game
-    - Showing all characters
-    - Show all questions in a dropdown
-    - Buttons (restart, guess, select question...)
- */
-
-// Build all constant UI elements:
-// Menu of questions
-// Ask-button
-// restart button (styling)

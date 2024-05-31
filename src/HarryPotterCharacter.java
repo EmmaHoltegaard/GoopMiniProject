@@ -4,6 +4,7 @@ package src;
  * Represents a Harry Potter character.
  * Harry Potters characters inherit attributes and behavior from the Character superclass.
  * They have additional attributes such as hair color, blood status, Hogwarts house, patronus, pets, etc.
+ * This is just an example of what another subclass of Character might look like.
  */
 public class HarryPotterCharacter extends Character {
     private String hair;
