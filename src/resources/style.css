@@ -1,6 +1,7 @@
 /* UNIVERSAL STYLES */
 * {
 -fx-font-family: "Helvetica";
+-fx-text-fill: #4b37ce;
 }
 
 /*
@@ -8,6 +9,7 @@ Colours:
 Menu background/ light purple: #B0A6FF
 Character-pane background/ light pink: #F4E8FF
 Dark purple: #4b37ce
+Darker purple: #34249D;
 disabled button: #978ee5
 
 *%
@@ -18,28 +20,15 @@ disabled button: #978ee5
     -fx-padding: 20px;
 }
 
-.restart-button {
-    -fx-background-color: #B0A6FF;
-    -fx-text-fill: #4b37ce;
-    -fx-font-weight: bold;
-    -fx-font-size: 14px;
-    -fx-alignment: center; /* Center the text */
-    -fx-border-width: 0; /* Remove the border */
-    -fx-pref-width: 70px; /* Set preferred width */
-    -fx-pref-height: 20px; /* Set preferred height */
-    -fx-background-radius: 10; /* adjust this value to change the radius */
-    -fx-border-radius: 10;
-    -fx-border-color: #4b37ce;
-    -fx-border-width: 2px; /* Sets the border width to 1 pixel */
-    -fx-border-style: solid; /* Sets the border style to solid */
-    }
+.logo {
+     -fx-fit-width: 160px;
+     -fx-fit-height: 150px;
+}
 
-.restart-button:hover {
-    -fx-background-color: #4b37ce;
-    -fx-text-fill: white;
-    -fx-background-radius: 10; /* adjust this value to change the radius */
-    -fx-border-radius: 10;
-    -fx-cursor: hand;
+.prompt {
+    -fx-font-size: 14;
+    -fx-font-weight: bold;
+    -fx-text-fill: #34249D;
 }
 
 .question-combo-box {
@@ -84,7 +73,9 @@ disabled button: #978ee5
     -fx-font-weight: bold;
     -fx-font-size: 18px;
     -fx-alignment: center; /* Center the text */
-    -fx-border-width: 0; /* Remove the border */
+    -fx-border-color: #4b37ce;
+    -fx-border-width: 1px; /* Sets the border width to 1 pixel */
+    -fx-border-style: solid; /* Sets the border style to solid */
     -fx-pref-width: 80px; /* Set preferred width */
     -fx-pref-height: 40px; /* Set preferred height */
     -fx-background-radius: 10; /* adjust this value to change the radius */
@@ -106,6 +97,46 @@ disabled button: #978ee5
 .ask-button:disabled {
     -fx-background-color: #978ee5;
 }
+
+
+.player-message-container {
+    -fx-border-color: #4b37ce;
+    -fx-border-width: 1px; /* Sets the border width to 1 pixel */
+    -fx-border-style: solid; /* Sets the border style to solid */
+    -fx-background-color: #F4E8FF;
+}
+
+.player-message,
+.limit-warning {
+    -fx-font-size: 14px;
+    -fx-fill: #34249D;
+    -fx-font-weight: bold;
+}
+
+
+.restart-button {
+    -fx-background-color: #B0A6FF;
+    -fx-text-fill: #4b37ce;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-alignment: center; /* Center the text */
+    -fx-pref-width: 70px; /* Set preferred width */
+    -fx-pref-height: 20px; /* Set preferred height */
+    -fx-background-radius: 10; /* adjust this value to change the radius */
+    -fx-border-radius: 10;
+    -fx-border-color: #4b37ce;
+    -fx-border-width: 2px; /* Sets the border width to 1 pixel */
+    -fx-border-style: solid; /* Sets the border style to solid */
+    }
+
+.restart-button:hover {
+    -fx-background-color: #4b37ce;
+    -fx-text-fill: white;
+    -fx-background-radius: 10; /* adjust this value to change the radius */
+    -fx-border-radius: 10;
+    -fx-cursor: hand;
+}
+
 
 /* THE BOARD */
 .board-container {
@@ -165,6 +196,7 @@ disabled button: #978ee5
 
 .result-message {
     -fx-background-color: #F4E8FF;
+    -fx-fill: #34249D;
     -fx-font-size: 16px;
     -fx-font-weight: bold;
 }

@@ -11,6 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 
@@ -107,16 +108,13 @@ public class GuessWho extends Application {
 
         // Create UI elements:
         askQuestionButton = new Button("Ask");
-
         Button restartButton = new Button("Restart");
-
         Label questionCount = new Label("Questions asked: " + currentGame.getQuestionCount() + " / " + currentGame.getQuestionLimit());
-
         Label prompt = new Label("Does the secret person have...");
-
-        playerMessage = new Text(currentGame.getMessage());
-
+        VBox playerMessageContainer = new VBox();
+        playerMessage = new Text(currentGame.getMessage() + "\n");
         limitWarning = new Text();
+        ImageView logo = new ImageView(new Image("src/resources/images/logo.png"));
 
 
 
@@ -139,8 +137,22 @@ public class GuessWho extends Application {
         //questionComboBox.getItems().addAll("This is a test");
 
         // Layout:
-        playerMessage.setWrappingWidth(150); // width on message
-        limitWarning.setWrappingWidth(150);
+        prompt.setWrapText(true);
+        prompt.setMaxWidth(160); // width on message
+        playerMessage.setWrappingWidth(160);
+        limitWarning.setWrappingWidth(160);
+        playerMessageContainer.setMinHeight(170);
+        playerMessageContainer.setPadding(new Insets(8));
+        menuContainer.setAlignment(Pos.TOP_CENTER);
+        VBox.setMargin(logo, new Insets(0,0,0,0));
+        VBox.setMargin(prompt, new Insets(0,0,5,0));
+        VBox.setMargin(questionComboBox, new Insets(0,0,0,0));
+        VBox.setMargin(askQuestionButton, new Insets(0,0,10,0));
+        VBox.setMargin(questionCount, new Insets(0,0,10,0));
+        VBox.setMargin(playerMessageContainer, new Insets(5,0,0,0));
+        VBox.setMargin(playerMessage, new Insets(0,0,15,0));
+        VBox.setMargin(restartButton, new Insets(10,0,0,0));
+
 
 
         // Add CSS style classes
@@ -148,8 +160,11 @@ public class GuessWho extends Application {
         restartButton.getStyleClass().add("restart-button");
         askQuestionButton.getStyleClass().add("ask-button");
         questionComboBox.getStyleClass().add("question-combo-box");
+        playerMessageContainer.getStyleClass().add("player-message-container");
         playerMessage.getStyleClass().add("player-message");
         limitWarning.getStyleClass().add("limit-warning");
+        logo.getStyleClass().add("logo");
+        prompt.getStyleClass().add("prompt");
 
         // Event handlers:
         restartButton.setOnAction( event -> {
@@ -188,8 +203,10 @@ public class GuessWho extends Application {
             }
         });
 
+        // add text elements to playerMessageContainer
+        playerMessageContainer.getChildren().addAll(playerMessage, limitWarning);
         // Add UI elements to container:
-        menuContainer.getChildren().addAll(restartButton, prompt, questionComboBox, askQuestionButton, questionCount, playerMessage, limitWarning);
+        menuContainer.getChildren().addAll(logo, prompt, questionComboBox, askQuestionButton, questionCount, playerMessageContainer, restartButton);
 
         return menuContainer;
     }
@@ -240,7 +257,6 @@ public class GuessWho extends Application {
         resultContainer.setSpacing(20);
         resultContainer.setPadding(new Insets(20)); // Padding around the container
 
-
         // add CSS classes:
         resultContainer.getStyleClass().add("result-container");
         resultMessage.getStyleClass().add("result-message");
@@ -250,11 +266,11 @@ public class GuessWho extends Application {
 
         // Reset playerMessage
         playerMessage.setText(currentGame.getMessage());
+        limitWarning.setText("");
 
         // Display correct message:
         if (isCorrect) {
             resultMessage.setText("Correct! The secret character is " + character.getName() + ":");
-
         } else {
             resultMessage.setText("Wrong! " + character.getName() + " is NOT the secret character - but " + currentGame.getSecretCharacter().getName() + " is:");
         }

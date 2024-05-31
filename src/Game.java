@@ -103,7 +103,7 @@ public class Game {
         if (parts.length == 2) {
             category = parts[0].toLowerCase();
             value = parts[1].toLowerCase();
-            System.out.println("Category:" + category + ", Value: " + value);
+            //System.out.println("Category:" + category + ", Value: " + value);
 
             // Check for match between selected question & secretPerson's attributed - and invoke filterCharacters()
                 // filterCharacters(true) = keep characters with selected attribute
@@ -111,10 +111,10 @@ public class Game {
             if (category.equals("hair") || category.equals("eyes")) {
                 String secretAttribute = secretCharacter.getAttribute(category, String.class);
                 if (secretAttribute.equals(value)) {
-                    setMessage("Yes, the secret character has " + value + " " + category);
+                    setMessage("Yes, the secret character has " + value + " " + category + ".");
                     filterCharacters(true, category, value);
                 } else {
-                    setMessage("No, the secret character does not have " + value + " " + category);
+                    setMessage("No, the secret character does not have " + value + " " + category + ".");
                     filterCharacters(false, category, value);
                 }
             } else if (category.equals("accessories") || category.equals("other") || category.equals("pets")) {
@@ -122,46 +122,46 @@ public class Game {
                 if (Arrays.asList(secretAttribute).contains(value)) {
                     filterCharacters(true, category, value);
                     if (category.equals("accessories") && value.equals("glasses")) {
-                        setMessage("Yes, the character wears " + value);
+                        setMessage("Yes, the character wears " + value + ".");
                     }
                     if (category.equals("accessories") && value.equals("hats")) {
-                        setMessage("Yes, the character wears a hat");
+                        setMessage("Yes, the character wears a hat.");
                     }
                     if (category.equals("accessories") && value.equals("facial hair")) {
-                        setMessage("Yes, the character has facial hair");
+                        setMessage("Yes, the character has facial hair.");
                     }
-                    if (category.equals("other") && value.equals("smoking")) {
-                        setMessage("Yes, the character smokes");
+                    if (category.equals("other") && value.equals("smoker")) {
+                        setMessage("Yes, the character is a smoker.");
                     }
                     if (category.equals("pets")) {
-                        setMessage("Yes, the character has a pet");
+                        setMessage("Yes, the character has a pet.");
                     }
                 } else {
                     if (category.equals("accessories") && value.equals("glasses")) {
-                        setMessage("No, the character does not wear " + value);
+                        setMessage("No, the character does not wear " + value + ".");
                     }
                     if (category.equals("accessories") && value.equals("hats")) {
-                        setMessage("No, the character does not wear a hat");
+                        setMessage("No, the character does not wear a hat.");
                     }
                     if (category.equals("accessories") && value.equals("facial hair")) {
-                        setMessage("No, the character does not have facial hair");
+                        setMessage("No, the character does not have facial hair.");
                     }
-                    if (category.equals("other") && value.equals("smoking")) {
-                        setMessage("No, the character doesn't smoke");
+                    if (category.equals("other") && value.equals("smoker")) {
+                        setMessage("No, the character isn't a smoker.");
                     }
                     if (category.equals("pets")) {
-                        setMessage("No, the character doesn't have a pet");
+                        setMessage("No, the character doesn't have a pet.");
                     }
                     filterCharacters(false, category, value);
                 }
             } else {
                 System.out.println("Category not valid");
-                setMessage("Category is not valid");
+                setMessage("Category is not valid.");
             }
 
         } else {
             System.out.println("Invalid question format");
-            setMessage("Invalid question format");
+            setMessage("Invalid question format.");
         }
     }
 
@@ -222,7 +222,6 @@ public class Game {
                 }
             return false; // Default to false if an exception occurs
         });
-
     }
 
     /**
@@ -242,14 +241,14 @@ public class Game {
         allCharacters.add(new BasicCharacter("Jacques", "src/resources/images/jacques.png", "grey", "blue", new String[]{"hats", "facial hair"}, new String[]{"smoker"}, new String[]{""}));
         allCharacters.add(new BasicCharacter("Jai", "src/resources/images/jai.png", "black", "brown", new String[]{}, new String[]{}, new String[]{}));
         allCharacters.add(new BasicCharacter("Jake", "src/resources/images/jake.png", "yellow", "green", new String[]{"glasses"}, new String[]{}, new String[]{}));
-        allCharacters.add(new BasicCharacter("James", "src/resources/images/james.png", "brown", "green", new String[]{"glasses", "facial-hair"}, new String[]{}, new String[]{}));
+        allCharacters.add(new BasicCharacter("James", "src/resources/images/james.png", "brown", "green", new String[]{"glasses", "facial hair"}, new String[]{}, new String[]{}));
         allCharacters.add(new BasicCharacter("Jana", "src/resources/images/jana.png", "black", "hidden", new String[]{"glasses"}, new String[]{}, new String[]{}));
         allCharacters.add(new BasicCharacter("Jane", "src/resources/images/jane.png", "yellow", "hidden", new String[]{"glasses"}, new String[]{}, new String[]{}));
         allCharacters.add(new BasicCharacter("Jaqueline", "src/resources/images/jaqueline.png", "orange", "green", new String[]{"glasses"}, new String[]{}, new String[]{}));
         allCharacters.add(new BasicCharacter("Jazebelle", "src/resources/images/jazebelle.png", "purple", "hidden", new String[]{"glasses"}, new String[]{"smoker"}, new String[]{}));
-        allCharacters.add(new BasicCharacter("Jean", "src/resources/images/jean.png", "brown", "blue", new String[]{"glasses", "hats", "facial-hair"}, new String[]{"smoker"}, new String[]{}));
+        allCharacters.add(new BasicCharacter("Jean", "src/resources/images/jean.png", "brown", "blue", new String[]{"glasses", "hats", "facial hair"}, new String[]{"smoker"}, new String[]{}));
         allCharacters.add(new BasicCharacter("Jeane", "src/resources/images/jeane.png", "brown", "green", new String[]{"glasses"}, new String[]{}, new String[]{}));
-        allCharacters.add(new BasicCharacter("Jed", "src/resources/images/jed.png", "orange", "green", new String[]{"glasses", "hats", "facial-hair"}, new String[]{"smoker"}, new String[]{}));
+        allCharacters.add(new BasicCharacter("Jed", "src/resources/images/jed.png", "orange", "green", new String[]{"glasses", "hats", "facial hair"}, new String[]{"smoker"}, new String[]{}));
         allCharacters.add(new BasicCharacter("Jenni", "src/resources/images/jenni.png", "white", "hidden", new String[]{"hats"}, new String[]{}, new String[]{}));
         allCharacters.add(new BasicCharacter("Jeri", "src/resources/images/jeri.png", "orange", "green", new String[]{"glasses"}, new String[]{}, new String[]{}));
         allCharacters.add(new BasicCharacter("Jerry", "src/resources/images/jerry.png", "hidden", "blue", new String[]{"hats"}, new String[]{}, new String[]{}));
@@ -259,38 +258,12 @@ public class Game {
         allCharacters.add(new BasicCharacter("Jordan", "src/resources/images/jordan.png", "yellow", "hidden", new String[]{"glasses", "hats"}, new String[]{}, new String[]{}));
         allCharacters.add(new BasicCharacter("Josephine", "src/resources/images/josephine.png", "grey", "brown", new String[]{}, new String[]{}, new String[]{}));
         allCharacters.add(new BasicCharacter("Josh", "src/resources/images/josh.png", "yellow", "green", new String[]{}, new String[]{}, new String[]{}));
-        allCharacters.add(new BasicCharacter("Jude", "src/resources/images/jude.png", "black", "green", new String[]{"facial-hair"}, new String[]{}, new String[]{}));
+        allCharacters.add(new BasicCharacter("Jude", "src/resources/images/jude.png", "black", "green", new String[]{"facial hair"}, new String[]{}, new String[]{}));
         allCharacters.add(new BasicCharacter("Julie", "src/resources/images/julie.png", "black", "brown", new String[]{"glasses", "hats"}, new String[]{}, new String[]{}));
 
         // Return the full list w. ALL characters
         return allCharacters;
     }
-
-
-    // This class will hold all game logic.
-// - Logic for setting up a new game
-//      - initializing the full ArrayList of characters + setting secret person
-// - Logic for filtering based on question asked
-// - A counter or limit on how many question have been/can be asked
-// - setting the secret person
-// - Logic for checking if a guess is correct
-
-    // Maybe I'll need a helper method for selecting and a character in GUI and making sure it's the guess the player wants to make...
-
-
-    // METHODS
-    // initializeCharacterList()
-    // setSecretPerson()
-    // start() (starts a new game)
-    //      - int guessCounter = 0;
-    //      - initializeCharacterList()
-    //          Assigns CharactersInPlay with a list of all characters
-    //      - setSecretPerson()
-    // updateGuessCounter()
-    // checkQuestion() - checks for a match between attribute and secretCharacter. Then call filterCharacters()
-    // filterCharacters() - again
-    // isGuessCorrect() - Checks if guess is correct
-
 }
 
 /* Notes on constructor vs. newGame():
