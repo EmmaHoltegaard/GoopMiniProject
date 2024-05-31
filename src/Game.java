@@ -59,25 +59,36 @@ public class Game {
         return questionLimit;
     }
 
-    // returns name of secret person
 
     /**
-     * Returns the name of the secret character
-     * @return name of secret character
+     * Returns the secret character
+     * @return secret character of the type Character
      */
-    public String getSecretCharacter() {
-        return secretCharacter.getName();
+    public Character getSecretCharacter() {
+        return secretCharacter;
     }
 
+    /**
+     * Returns a game message, which guides the player or gives feedback on their actions.
+     * @return The game message
+     */
     public String getMessage() {
         return message;
     }
 
     /**
+     * Changes the player message
+     * @param playerMessage
+     */
+    public void setMessage(String playerMessage) {
+        message = playerMessage;
+    }
+
+    /**
      * Checks the selected question against the secret character, by splitting it into category and value,
-     * and then checking if the secret character's attributes match the selected values.
+     * and then checking if the secret character's attributes match the given values.
      * Then calls the filterCharacter() method to filter the list of characters accordingly.
-     * This method is not dynamic in this iteration and is only set up to deal with BasicCharacters
+     * NB: This method is not dynamic in this iteration and is only set up to deal with BasicCharacters
      * @param question The question selected by the user, formatted as "category: value".
      *                 Valid categories are "hair", "eyes", "accessories", "other", and "pets".
      *                 Represents the specific attribute to be checked against the secret character.
@@ -95,32 +106,62 @@ public class Game {
             System.out.println("Category:" + category + ", Value: " + value);
 
             // Check for match between selected question & secretPerson's attributed - and invoke filterCharacters()
-            // filterCharacters(true) = keep characters with selected attribute
-            // filterCharacters(false) = remove characters with selected attribute
+                // filterCharacters(true) = keep characters with selected attribute
+                // filterCharacters(false) = remove characters with selected attribute
             if (category.equals("hair") || category.equals("eyes")) {
                 String secretAttribute = secretCharacter.getAttribute(category, String.class);
                 if (secretAttribute.equals(value)) {
-                    message = "Yes, the secret character has " + value + " " + category;
+                    setMessage("Yes, the secret character has " + value + " " + category);
                     filterCharacters(true, category, value);
                 } else {
-                    message = "No, the secret character does not have " + value + " " + category;
+                    setMessage("No, the secret character does not have " + value + " " + category);
                     filterCharacters(false, category, value);
                 }
             } else if (category.equals("accessories") || category.equals("other") || category.equals("pets")) {
                 String[] secretAttribute = secretCharacter.getAttribute(category, String[].class);
                 if (Arrays.asList(secretAttribute).contains(value)) {
                     filterCharacters(true, category, value);
+                    if (category.equals("accessories") && value.equals("glasses")) {
+                        setMessage("Yes, the character wears " + value);
+                    }
+                    if (category.equals("accessories") && value.equals("hats")) {
+                        setMessage("Yes, the character wears a hat");
+                    }
+                    if (category.equals("accessories") && value.equals("facial hair")) {
+                        setMessage("Yes, the character has facial hair");
+                    }
+                    if (category.equals("other") && value.equals("smoking")) {
+                        setMessage("Yes, the character smokes");
+                    }
+                    if (category.equals("pets")) {
+                        setMessage("Yes, the character has a pet");
+                    }
                 } else {
+                    if (category.equals("accessories") && value.equals("glasses")) {
+                        setMessage("No, the character does not wear " + value);
+                    }
+                    if (category.equals("accessories") && value.equals("hats")) {
+                        setMessage("No, the character does not wear a hat");
+                    }
+                    if (category.equals("accessories") && value.equals("facial hair")) {
+                        setMessage("No, the character does not have facial hair");
+                    }
+                    if (category.equals("other") && value.equals("smoking")) {
+                        setMessage("No, the character doesn't smoke");
+                    }
+                    if (category.equals("pets")) {
+                        setMessage("No, the character doesn't have a pet");
+                    }
                     filterCharacters(false, category, value);
                 }
             } else {
                 System.out.println("Category not valid");
-                message = "Category is not valid";
+                setMessage("Category is not valid");
             }
 
         } else {
             System.out.println("Invalid question format");
-            message = "Invalid question format";
+            setMessage("Invalid question format");
         }
     }
 
@@ -131,11 +172,10 @@ public class Game {
      *         {@code false} otherwise.
      */
     public boolean checkGuess(Character guess) {
+        setMessage("You've made your guess. Press restart to play again.");
         if (guess.getName().equals(secretCharacter.getName())) {
-            message = "Correct!";
             return true;
         } else {
-            message = "Wrong!";
             return false;
         }
     }

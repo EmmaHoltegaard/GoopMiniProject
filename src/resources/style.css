@@ -39,6 +39,7 @@ disabled button: #978ee5
     -fx-text-fill: white;
     -fx-background-radius: 10; /* adjust this value to change the radius */
     -fx-border-radius: 10;
+    -fx-cursor: hand;
 }
 
 .question-combo-box {
@@ -98,6 +99,7 @@ disabled button: #978ee5
     -fx-text-fill: #4b37ce;
     -fx-background-radius: 10; /* adjust this value to change the radius */
     -fx-border-radius: 10;
+    -fx-cursor: hand;
 }
 /*jumps slightly on hover - fix later*/
 
@@ -156,4 +158,14 @@ disabled button: #978ee5
 .character-image {
     -fx-fit-width: 110px;
     -fx-fit-height: 110px;
+}
+
+/* Result display */
+.result-container {
+    -fx-background-color: green;
+}
+
+.result-message {
+    -fx-background-color: yellow;
+
 }

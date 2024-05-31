@@ -1,8 +1,10 @@
 package src;
 
 import javafx.application.Application;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -20,17 +22,25 @@ import javafx.stage.Stage;
  */
 public class GuessWho extends Application {
 
-    //Instance variables:
     /**
      * Hold the game object representing the current game
      */
     Game currentGame;
+
+    // UI elements that will need to be accessed by multiple methods:
     /**
      * The container for the board, which shows the characters currently in play.
      */
     GridPane boardContainer; // must be inst. var. to be accessible in generateBoard as well as start()
 
+    /**
+     * A message to player based on their latest action
+     */
     Text playerMessage;
+
+    Button askQuestionButton;
+
+
 
 
     /**
@@ -67,7 +77,7 @@ public class GuessWho extends Application {
             generateBoard();
 
             // Testing:
-            System.out.println("Secret person is:" + currentGame.getSecretCharacter());
+            System.out.println("Secret person is:" + currentGame.getSecretCharacter().getName());
             for (Character character : currentGame.charactersInPlay) {
                 System.out.println(character.getName());
             }
@@ -98,7 +108,7 @@ public class GuessWho extends Application {
         VBox menuContainer = new VBox(10);
 
         // Create UI elements:
-        Button askQuestionButton = new Button("Ask");
+        askQuestionButton = new Button("Ask");
 
         Button restartButton = new Button("Restart");
 
@@ -132,7 +142,7 @@ public class GuessWho extends Application {
         playerMessage.setWrappingWidth(150); // width on message
 
 
-        // Set CSS style class
+        // Add CSS style classes
         menuContainer.getStyleClass().add("menu-container");
         restartButton.getStyleClass().add("restart-button");
         askQuestionButton.getStyleClass().add("ask-button");
@@ -142,31 +152,35 @@ public class GuessWho extends Application {
         // Event handlers:
         restartButton.setOnAction( event -> {
             currentGame = new Game();
-            System.out.println("Secret person is:" + currentGame.getSecretCharacter());
+            System.out.println("Secret person is:" + currentGame.getSecretCharacter().getName());
             generateBoard();
             questionCount.setText("Questions asked: " + currentGame.getQuestionCount() + " / " + currentGame.getQuestionLimit()); // update question count in UI
             askQuestionButton.setDisable(false); // reactivate ask-button
             updatePlayerMessage();
         });
 
-        // Set up action for when an option is selected
         askQuestionButton.setOnAction(event -> {
             String selectedOption = questionComboBox.getValue();
             System.out.println("Selected question is " + selectedOption);
 
             if (!selectedOption.equals("Choose one...")) {
+                // Checks of question limit has been reached
                 if(currentGame.getQuestionCount() < currentGame.getQuestionLimit()) {
                     currentGame.checkQuestion(selectedOption);
                     questionCount.setText("Questions asked: " + currentGame.getQuestionCount() + " / " + currentGame.getQuestionLimit()); // update questionCount
                     updatePlayerMessage();
                     generateBoard();
 
-                    // Once limit is reached, disable ask button
+                    // Once question limit is reached, disable ask button
                     if (currentGame.getQuestionCount() >= currentGame.getQuestionLimit()) {
                         askQuestionButton.setDisable(true);
                         System.out.println("Question limit has been reached");}
+                        // Print some kind of message - but not in player message.
                 }
             } else {
+                askQuestionButton.setDisable(true);
+                // currentGame.setMessage("You cannot ask anymore questions. It's time to make a guess!");
+                playerMessage.setText(currentGame.getMessage());
                 System.out.println("Please select a question from the drop-down");
             }
         });
@@ -198,18 +212,71 @@ public class GuessWho extends Application {
     }
 
     /**
+     * Clears the board
+     */
+    private void clearBoard(){
+        // Clear & reset board of child elements:
+        boardContainer.getChildren().clear();
+    }
+
+    /**
+     * Displays a win or lose message, depending on the outcome of the guess
+     * @param isCorrect {@code true} if the guess passed is correct, {@code false} if not.
+     * @param character the character that was selected as the guess
+     */
+    private void showResult(Boolean isCorrect, Character character) {
+        clearBoard();
+
+        // Generate UI elements
+        VBox resultContainer = new VBox();
+        Text resultMessage = new Text();
+        ImageView secretCharacterImage = new ImageView(new Image(currentGame.getSecretCharacter().getImage()));
+
+        // Layout:
+        resultContainer.setAlignment(Pos.CENTER);
+        resultContainer.setSpacing(20);
+        resultContainer.setPadding(new Insets(20)); // Padding around the container
+
+
+        // add CSS classes:
+        resultContainer.getStyleClass().add("result-container");
+        resultMessage.getStyleClass().add("result-message");
+
+        // Disable askQuestionButton:
+        askQuestionButton.setDisable(true);
+
+        // Reset playerMessage
+        playerMessage.setText(currentGame.getMessage());
+
+        // Display correct message:
+        if (isCorrect) {
+            resultMessage.setText("You guess is correct! The secret character is " + character.getName() + ":");
+
+        } else {
+            resultMessage.setText("Wrong guess! " + character.getName() + "is NOT the secret character - but " + currentGame.getSecretCharacter().getName() + " is:");
+        }
+
+
+        // Add to UI
+        resultContainer.getChildren().addAll(resultMessage, secretCharacterImage);
+        boardContainer.getChildren().add(resultContainer);
+    }
+
+
+    /**
      * Generates the UI elements for the game board,
      * including name, image and guess-button for each character currently in play.
      */
     private void generateBoard() {
-        // Clear & reset board of child elements:
-        boardContainer.getChildren().clear();
+        clearBoard();
+
 
         // create UI element for each character + add to boardContainer
         int numColumns = 6; // Pre-defined the number of columns
         int rowIndex = 0;
         int columnIndex = 0;
 
+        // Generate character-card for each character still in play:
         for (Character character : currentGame.charactersInPlay) {
             // Layout: characterPaneContainer and characterPane that stacks character image + button
             VBox characterPaneContainer = new VBox();
@@ -225,7 +292,8 @@ public class GuessWho extends Application {
             StackPane.setMargin(characterButton, new Insets(0, 0, 5, 0)); // bottom margin
             characterPaneContainer.setAlignment(Pos.TOP_CENTER); // Align the container at the top center
             VBox.setMargin(characterName, new Insets(5, 0, 5, 0)); // Add spacing between elements
-            characterName.setAlignment(Pos.TOP_CENTER);
+            characterName.setAlignment(Pos.TOP_CENTER); // center pos for name
+            GridPane.setMargin(characterPaneContainer, new Insets(5, 5, 5, 5)); // Margin around characterPanes
 
             // CSS style classes
             characterButton.getStyleClass().add("character-button");
@@ -240,16 +308,8 @@ public class GuessWho extends Application {
                 System.out.println("Clicked character: " + character.getName());
 
                 boolean isGuessCorrect = currentGame.checkGuess(character);
-
-                if (isGuessCorrect) {
-                    System.out.println("Correct!"); // change to an allert? Followed by restart?
-                } else {
-                    System.out.println("Wrong!");
-                }
+                showResult(isGuessCorrect, character);
             });
-
-            // Margin around characterPanes
-            GridPane.setMargin(characterPaneContainer, new Insets(5, 5, 5, 5));
 
             // Add characterName + characterPane to characterPaneContainer
             characterPaneContainer.getChildren().addAll(characterName, characterPane);
@@ -257,7 +317,7 @@ public class GuessWho extends Application {
             // Add the UI elements to the characterPane
             characterPane.getChildren().addAll(characterImage, characterButton);
 
-            // Add the characterPaneContainer to the board container at the specified position
+            // Add the characterPaneContainer to the board container w. specified position
             boardContainer.add(characterPaneContainer, columnIndex, rowIndex);
 
 
@@ -269,8 +329,7 @@ public class GuessWho extends Application {
                 rowIndex++; // increment current rowIndex
             }
         }
-
-    }
+    } // end of generateBoard()
 
 
 } // end of Main
