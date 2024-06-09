@@ -220,28 +220,28 @@ public class Game {
         updateQuestionCount();
         System.out.println(getQuestionCount());
 
-        // removeIf() iterates over characters in CharactersInPlay, and removes based on boolean condition.
+        // removeIf() iterates over characters in charactersInPlay, and removes based on boolean condition.
         charactersInPlay.removeIf(person -> {
-            // Stores the attribute value for each character (in turn) for the relevant category.
+            // Stores the attribute value for each character in list (ion at a time) for the specified category
             Object attribute = person.getAttribute(category, Object.class);
 
-            // Check if the attribute is a single value (String)
+            // Check if the attribute is a String
             if (attribute instanceof String) {
                 // If we want to keep characters and the attribute matches the specified value,
                 // return false (don't remove). If we want to keep characters and the attribute
                 // doesn't match the specified value, return true (remove).
-                if (keep && attribute.equals(value)) {
-                    return false;
-                } else if (keep && !attribute.equals(value)) {
-                    return true;
+                if (keep && attribute.equals(value)) { // if we want to keep AND attribute matches
+                    return false; // don't remove the character
+                } else if (keep && !attribute.equals(value)) { // if we want to keep AND attribute  doesn't match
+                    return true; // remove the character
                 }
                 // If we want to remove characters and the attribute matches the specified value,
                 // return true (remove). If we want to remove characters and the attribute doesn't
                 // match the specified value, return false (don't remove).
-                else if (!keep && attribute.equals(value)) {
-                    return true;
-                } else if (!keep && !attribute.equals(value)) {
-                    return false;
+                else if (!keep && attribute.equals(value)) { // if we don't want to keep + attribute matches
+                    return true; // remove character
+                } else if (!keep && !attribute.equals(value)) { // If we don't want to keep + attribute doesn't match
+                    return false; // don't remove
                 }
             }
             // Check if the attribute is an array of values (String[])
@@ -250,18 +250,18 @@ public class Game {
                 // If we want to keep characters and the attribute array contains the specified value,
                 // return false (don't remove). If we want to keep characters and the attribute array
                 // doesn't contain the specified value, return true (remove).
-                if (keep && Arrays.asList((String[]) attribute).contains(value)) {
+                if (keep && Arrays.asList((String[]) attribute).contains(value)) { // If we want to keep + list of values contains the specified attribute value
                     return false; // Don't remove
-                } else if (keep && !Arrays.asList((String[]) attribute).contains(value)) {
+                } else if (keep && !Arrays.asList((String[]) attribute).contains(value)) { // If we want to keep + list doesn't contain specified value
                     return true; // Remove
                 }
                 // If we want to remove characters and the attribute array contains the specified value,
                 // return true (remove). If we want to remove characters and the attribute array
                 // doesn't contain the specified value, return false (don't remove).
-                else if (!keep && Arrays.asList((String[]) attribute).contains(value)) {
-                    return true;
-                } else if (!keep && !Arrays.asList((String[]) attribute).contains(value)) {
-                    return false;
+                else if (!keep && Arrays.asList((String[]) attribute).contains(value)) { // If we don't want to keep + list of values contains the specified attribute value
+                    return true; // Remove
+                } else if (!keep && !Arrays.asList((String[]) attribute).contains(value)) { // If we don't want to keep + list doesn't contain specified value
+                    return false; // don't remove
                 }
             }
             return false; // removeIf() default to false
