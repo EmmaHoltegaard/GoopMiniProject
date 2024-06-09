@@ -11,7 +11,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 
@@ -72,12 +71,11 @@ public class GuessWho extends Application {
             root.setCenter(boardContainer);
 
             // New game on start():
-            //currentGame = new Game();
             generateBoard();
 
             // Testing:
             System.out.println("Secret person is:" + currentGame.getSecretCharacter().getName());
-            for (Character character : currentGame.charactersInPlay) {
+            for (Character character : currentGame.getCharactersInPlay()) {
                 System.out.println(character.getName());
             }
 
@@ -153,8 +151,6 @@ public class GuessWho extends Application {
         VBox.setMargin(playerMessage, new Insets(0,0,15,0));
         VBox.setMargin(restartButton, new Insets(10,0,0,0));
 
-
-
         // Add CSS style classes
         menuContainer.getStyleClass().add("menu-container");
         restartButton.getStyleClass().add("restart-button");
@@ -182,9 +178,11 @@ public class GuessWho extends Application {
             System.out.println("Selected question is " + selectedOption);
 
             if (!selectedOption.equals("Choose one...")) {
-                // Checks of question limit has been reached
+                // Checks that question limit has not yet been reached:
                 if(currentGame.getQuestionCount() < currentGame.getQuestionLimit()) {
+                    // Run question through checkQuestion method:
                     currentGame.checkQuestion(selectedOption);
+                    // Update UI:
                     questionCount.setText("Questions asked: " + currentGame.getQuestionCount() + " / " + currentGame.getQuestionLimit()); // update questionCount
                     updatePlayerMessage();
                     generateBoard();
@@ -192,14 +190,13 @@ public class GuessWho extends Application {
                     // Once question limit is reached, disable ask button
                     if (currentGame.getQuestionCount() >= currentGame.getQuestionLimit()) {
                         askQuestionButton.setDisable(true);
-                        // System.out.println("Question limit has been reached");
                         limitWarning.setText("You cannot ask anymore questions. It's time to make a guess!");
                     }
                 }
             } else {
+                // When question limit is reached, disable button:
                 askQuestionButton.setDisable(true);
                 playerMessage.setText(currentGame.getMessage());
-                // System.out.println("Please select a question from the drop-down");
             }
         });
 
@@ -209,7 +206,7 @@ public class GuessWho extends Application {
         menuContainer.getChildren().addAll(logo, prompt, questionComboBox, askQuestionButton, questionCount, playerMessageContainer, restartButton);
 
         return menuContainer;
-    }
+    } // end of createMenuContainer
 
     /**
      * Creates the container for the game board
@@ -297,7 +294,7 @@ public class GuessWho extends Application {
         int columnIndex = 0;
 
         // Generate character-card for each character still in play:
-        for (Character character : currentGame.charactersInPlay) {
+        for (Character character : currentGame.getCharactersInPlay()) {
             // Layout: characterPaneContainer and characterPane that stacks character image + button
             VBox characterPaneContainer = new VBox();
             StackPane characterPane = new StackPane();

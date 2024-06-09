@@ -34,7 +34,7 @@ public class BasicCharacter extends Character {
     }
 
     /**
-     * Returns the value(s) of a specific attribute for a character, with type safety
+     * Returns the value(s) of a specific category for a character, with type safety
      * @param category The category of the attribute to retrieve
      * @param type The class type of the attribute that is returned
      * @return The value(s) of the selected attribute.

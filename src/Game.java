@@ -13,7 +13,7 @@ public class Game {
     /**
      * A list of the characters currently active on the board
      */
-    public ArrayList<Character> charactersInPlay;
+    private ArrayList<Character> charactersInPlay;
     /**
      * Holds the name of the secret character
      */
@@ -44,7 +44,15 @@ public class Game {
 
     // METHODS:
     /**
-     * Returns number of questions asked during the game
+     * Gets the list of characters currently in play
+     * @return an ArrayList Characters objects
+     */
+    public ArrayList<Character> getCharactersInPlay() {
+        return charactersInPlay;
+    }
+
+    /**
+     * Gets the number of questions asked during the game
      * @return number of questions asked
      */
     public int getQuestionCount() {
@@ -78,17 +86,17 @@ public class Game {
 
     /**
      * Changes the player message
-     * @param playerMessage
+     * @param playerMessage text for the player message
      */
     public void setMessage(String playerMessage) {
         message = playerMessage;
     }
 
     /**
-     * Checks the selected question against the secret character, by splitting it into category and value,
-     * and then checking if the secret character's attributes match the given values.
-     * Then calls the filterCharacter() method to filter the list of characters accordingly.
-     * NB: This method is not dynamic in this iteration and is only set up to deal with BasicCharacters
+     * Checks the selected question against the secret character by splitting it into category and value,
+     * and checking if these match any of the secret character's attributes.
+     * Then calls the filterCharacter() method to filter the list of characters and sets a new message accordingly.
+     * NB: This method is not dynamic in this iteration and is only set up to deal with BasicCharacter objects
      * @param question The question selected by the user, formatted as "category: value".
      *                 Valid categories are "hair", "eyes", "accessories", "other", and "pets".
      *                 Represents the specific attribute to be checked against the secret character.
@@ -212,15 +220,51 @@ public class Game {
         updateQuestionCount();
         System.out.println(getQuestionCount());
 
+        // removeIf() iterates over characters in CharactersInPlay, and removes based on boolean condition.
         charactersInPlay.removeIf(person -> {
-                Object attribute = person.getAttribute(category, Object.class); // getAttribute requires try-catch because of eexceptop
+            // Stores the attribute value for each character (in turn) for the relevant category.
+            Object attribute = person.getAttribute(category, Object.class);
 
-                if (attribute instanceof String) {
-                    return attribute.equals(value) != keep;
-                } else if (attribute instanceof String[]) {
-                    return Arrays.asList((String[]) attribute).contains(value) != keep;
+            // Check if the attribute is a single value (String)
+            if (attribute instanceof String) {
+                // If we want to keep characters and the attribute matches the specified value,
+                // return false (don't remove). If we want to keep characters and the attribute
+                // doesn't match the specified value, return true (remove).
+                if (keep && attribute.equals(value)) {
+                    return false;
+                } else if (keep && !attribute.equals(value)) {
+                    return true;
                 }
-            return false; // Default to false if an exception occurs
+                // If we want to remove characters and the attribute matches the specified value,
+                // return true (remove). If we want to remove characters and the attribute doesn't
+                // match the specified value, return false (don't remove).
+                else if (!keep && attribute.equals(value)) {
+                    return true;
+                } else if (!keep && !attribute.equals(value)) {
+                    return false;
+                }
+            }
+            // Check if the attribute is an array of values (String[])
+            else if (attribute instanceof String[]) {
+                // Convert the array to a list to run contains() method
+                // If we want to keep characters and the attribute array contains the specified value,
+                // return false (don't remove). If we want to keep characters and the attribute array
+                // doesn't contain the specified value, return true (remove).
+                if (keep && Arrays.asList((String[]) attribute).contains(value)) {
+                    return false; // Don't remove
+                } else if (keep && !Arrays.asList((String[]) attribute).contains(value)) {
+                    return true; // Remove
+                }
+                // If we want to remove characters and the attribute array contains the specified value,
+                // return true (remove). If we want to remove characters and the attribute array
+                // doesn't contain the specified value, return false (don't remove).
+                else if (!keep && Arrays.asList((String[]) attribute).contains(value)) {
+                    return true;
+                } else if (!keep && !Arrays.asList((String[]) attribute).contains(value)) {
+                    return false;
+                }
+            }
+            return false; // removeIf() default to false
         });
     }
 

@@ -41,5 +41,13 @@ public abstract class Character {
     }
 
     // A method that returns value(s) of a specific attribute, with type safety (using generics)
+
+    /**
+     * Retuns the value(s) of a specific attribute
+     * @param category The category of the attribute to retrieve
+     * @param type The class type of the attribute that is returned
+     * @return The value(s) of the selected attribute.
+     * @param <T> The type for the value of the attribute
+     */
     public abstract <T> T getAttribute(String category, Class<T> type);
 }
