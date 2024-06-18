@@ -13,6 +13,7 @@ public abstract class Character {
 
 
     // Constructor:
+
     /**
      * Constructs a BasicCharacter object with the specified attributes.
      * @param name The name of the character.
@@ -41,11 +42,11 @@ public abstract class Character {
 
     // A method that returns value(s) of a specific attribute, with type safety (using generics)
     /**
-     * Returns the value(s) of a specific attribute category, with type safety
+     * Returns the value(s) of a specific attribute category
      * @param category The category of the attribute to retrieve
      * @param type The class type of the attribute to retrieve (either String og String[])
-     * @return The value(s) of the given attribute as any specified data type.
-     * @param <T> The type for the value of the given attribute
+     * @return The value(s) of the given attribute as the specified data type.
+     * @param <T> The type for the value of the attribute
      */
     public abstract <T> T getAttribute(String category, Class<T> type);
 }

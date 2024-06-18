@@ -117,7 +117,7 @@ public class GuessWho extends Application {
 
 
 
-        // OBS: This combobox is not yet dynamic, but hard-coded to only handle the BasicCharacter subclass.
+        // NB: This combobox is not yet dynamic, but hard-coded to only handle the BasicCharacter subclass.
         ComboBox<String> questionComboBox = new ComboBox<>();
         // Add the "Choose one..." item
         questionComboBox.getItems().add("Choose one...");
@@ -223,7 +223,7 @@ public class GuessWho extends Application {
     }
 
     /**
-     * Displays the content of player message to the most recent game message
+     * Displays the content of player message to display the most recent game message
      */
     private void updatePlayerMessage(){
         playerMessage.setText(currentGame.getMessage());
@@ -281,7 +281,7 @@ public class GuessWho extends Application {
 
     /**
      * Generates the UI elements for the game board,
-     * including name, image and guess-button for each character currently in play.
+     * including name, image, guess-button for each character currently in play.
      */
     private void generateBoard() {
         clearBoard();
@@ -325,8 +325,8 @@ public class GuessWho extends Application {
                 // Handle button click
                 System.out.println("Clicked character: " + character.getName());
 
-                boolean isGuessCorrect = currentGame.checkGuess(character);
-                showResult(isGuessCorrect, character);
+                boolean isGuessCorrect = currentGame.checkGuess(character); // Check if guess is correct, and store result
+                showResult(isGuessCorrect, character); // Show the result (win or lose screen)
             });
 
             // Add characterName + characterPane to characterPaneContainer

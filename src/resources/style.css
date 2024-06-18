@@ -145,9 +145,6 @@ disabled button: #978ee5
 }
 
 .character-pane-container {
-    /*-fx-border-color: black; /* Sets the border color to black */
-    /*-fx-border-width: 1px; /* Sets the border width to 1 pixel */
-    /*-fx-border-style: solid; /* Sets the border style to solid */
     -fx-background-color: #F4E8FF;
     -fx-background-radius: 10; /* adjust this value to change the radius */
 }
@@ -157,9 +154,6 @@ disabled button: #978ee5
     -fx-text-color: #A259FF;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
-}
-
-.character-pane {
 }
 
 

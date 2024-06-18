@@ -36,11 +36,11 @@ public class BasicCharacter extends Character {
     }
 
     /**
-     * Returns the value(s) of a specific attribute category, with type safety
+     * Returns the value(s) of a specific attribute category
      * @param category The category of the attribute to retrieve
      * @param type The class type of the attribute to retrieve (either String og String[])
-     * @return The value(s) of the given attribute as any specified data type.
-     * @param <T> The type for the value of the given attribute
+     * @return The value(s) of the given attribute as the specified data type.
+     * @param <T> The type for the value of the attribute
      */
     @Override
     public <T> T getAttribute(String category, Class<T> type) {
@@ -58,6 +58,5 @@ public class BasicCharacter extends Character {
         }
         return null;
     }
-
 }
 
