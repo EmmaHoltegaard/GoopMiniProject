@@ -1,3 +1,5 @@
+// NB: getAttribute() was written with help from ChatGPT
+
 package src;
 
 /**
@@ -34,11 +36,11 @@ public class BasicCharacter extends Character {
     }
 
     /**
-     * Returns the value(s) of a specific category for a character, with type safety
+     * Returns the value(s) of a specific attribute category, with type safety
      * @param category The category of the attribute to retrieve
-     * @param type The class type of the attribute that is returned
-     * @return The value(s) of the selected attribute.
-     * @param <T> The type for the value of the attribute
+     * @param type The class type of the attribute to retrieve (either String og String[])
+     * @return The value(s) of the given attribute as any specified data type.
+     * @param <T> The type for the value of the given attribute
      */
     @Override
     public <T> T getAttribute(String category, Class<T> type) {
@@ -56,5 +58,6 @@ public class BasicCharacter extends Character {
         }
         return null;
     }
+
 }
 

@@ -21,7 +21,7 @@ import javafx.stage.Stage;
 public class GuessWho extends Application {
 
     /**
-     * Hold the game object representing the current game
+     * Stores a Game object representing the current game
      */
     Game currentGame;
 
@@ -32,23 +32,24 @@ public class GuessWho extends Application {
     StackPane boardContainer; // must be inst. var. to be accessible in generateBoard as well as start()
 
     /**
-     * A message to player based on their latest action
+     * A message to player based on their latest action.
      */
     Text playerMessage;
 
+    /**
+     * A message displayed when question limit has been reached.
+     */
     Text limitWarning;
 
     Button askQuestionButton;
 
 
     /**
-     * Starts the application by initializing a new game and setting up the primary stage.
+     * Starts the application by instantiating a new Game object and setting up the primary stage.
      *
-     * @param primaryStage the primary stage for this application, onto which
+     * @param primaryStage the primary stage for this application, on which
      * the application scene can be set.
-     * Applications may create other stages, if needed, but they will not be
-     * primary stages.
-     * @throws Exception if an error occurs during application initialization.
+     * @throws Exception if an error occurs during application start.
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -70,14 +71,14 @@ public class GuessWho extends Application {
             boardContainer = createBoardContainer();
             root.setCenter(boardContainer);
 
-            // New game on start():
+            // New game board on start():
             generateBoard();
 
-            // Testing:
-            System.out.println("Secret person is:" + currentGame.getSecretCharacter().getName());
+            // For testing, log characters + secret person:
             for (Character character : currentGame.getCharactersInPlay()) {
                 System.out.println(character.getName());
             }
+            System.out.println("Secret person is:" + currentGame.getSecretCharacter().getName());
 
             // Set the scene and show the stage
             Scene scene = new Scene(root, 970, 625);
